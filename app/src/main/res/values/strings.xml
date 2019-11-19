@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">League</string>
+    <string name="unknown_error">UnKnown Error</string>
+    <string name="description">Description</string>
+</resources>
