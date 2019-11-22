@@ -3,9 +3,9 @@ package com.rachmad.app.league.repository
 import androidx.lifecycle.MutableLiveData
 import com.rachmad.app.league.data.Connection
 import com.rachmad.app.league.data.ErrorData
-import com.rachmad.app.league.dataclass.BaseLeagueData
-import com.rachmad.app.league.dataclass.BaseLeagueDetailsData
-import com.rachmad.app.league.dataclass.LeagueList
+import com.rachmad.app.league.`object`.BaseLeagueData
+import com.rachmad.app.league.`object`.BaseLeagueDetailsData
+import com.rachmad.app.league.`object`.LeagueList
 import com.rachmad.app.league.webservice.LeagueSite
 import retrofit2.Call
 import retrofit2.Callback
@@ -33,12 +33,15 @@ class LeagueRepository {
             ) {
                 if(response.isSuccessful){
                     response.body()?.let {
-                        if(it.countrys.size > 0){
-                            leagueList = it.countrys
-                            connectionLeagueList.postValue(Connection.OK.Status)
-                        }
-                        else{
-                            sendError("Data is empty")
+                        it.countrys?.let {
+                            if (it.size > 0) {
+                                leagueList = it
+                                connectionLeagueList.postValue(Connection.OK.Status)
+                            } else {
+                                sendError("Data is empty")
+                            }
+                        } ?: run {
+                            sendError("Country is empty")
                         }
                     } ?: run {
                         sendError("Body is null")
@@ -67,18 +70,18 @@ class LeagueRepository {
                 t.printStackTrace()
             }
 
-            override fun onResponse(
-                call: Call<BaseLeagueDetailsData>,
-                response: Response<BaseLeagueDetailsData>
-            ) {
+            override fun onResponse(call: Call<BaseLeagueDetailsData>, response: Response<BaseLeagueDetailsData>) {
                 if(response.isSuccessful){
                     response.body()?.let {
-                        if(it.leagues.size > 0){
-                            leagueDetails = it.leagues[0]
-                            connectionLeagueDetails.postValue(Connection.OK.Status)
-                        }
-                        else{
-                            sendErrorDetails("Data is empty")
+                        it.leagues?.let {
+                            if (it.size > 0) {
+                                leagueDetails = it[0]
+                                connectionLeagueDetails.postValue(Connection.OK.Status)
+                            } else {
+                                sendErrorDetails("Data is empty")
+                            }
+                        } ?: run {
+                            sendErrorDetails("League is empty")
                         }
                     } ?: run {
                         sendErrorDetails("Body is null")

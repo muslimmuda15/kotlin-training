@@ -3,10 +3,10 @@ package com.rachmad.app.league.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.rachmad.app.league.data.ErrorData
-import com.rachmad.app.league.dataclass.LeagueList
+import com.rachmad.app.league.`object`.LeagueList
 import com.rachmad.app.league.repository.LeagueRepository
 
-class ListModel: ViewModel() {
+class LeagueViewModel: ViewModel() {
     val leagueRepository = LeagueRepository()
 
     fun connectionLeagueList(): LiveData<Int> = leagueRepository.connectionLeagueList

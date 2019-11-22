@@ -2,4 +2,6 @@
     <string name="app_name">League</string>
     <string name="unknown_error">UnKnown Error</string>
     <string name="description">Description</string>
+    <string name="last_match">Last Match</string>
+    <string name="next_match">Next Match</string>
 </resources>

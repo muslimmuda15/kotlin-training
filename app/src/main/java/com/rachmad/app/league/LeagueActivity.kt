@@ -4,11 +4,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.module.AppGlideModule
-import com.rachmad.app.league.viewmodel.ListModel
+import com.rachmad.app.league.viewmodel.LeagueViewModel
 
-open class BaseActivity: AppCompatActivity() {
-    val viewModel: ListModel by lazy { ViewModelProviders.of(this).get(
-        ListModel::class.java) }
+open class LeagueActivity: AppCompatActivity() {
+    val viewModel: LeagueViewModel by lazy { ViewModelProviders.of(this).get(
+        LeagueViewModel::class.java)
+    }
 }
 
 @GlideModule
