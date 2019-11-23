@@ -37,10 +37,10 @@ class MatchRepository {
                                 matchNextList = it
                                 connectionMatchNextList.postValue(Connection.OK.Status)
                             } else {
-                                sendErrorMatchNext("Data is empty")
+                                sendErrorMatchNext("We have no data")
                             }
                         } ?: run {
-                            sendErrorMatchNext("Event is empty")
+                            sendErrorMatchNext("We have no data")
                         }
                     } ?: run {
                         sendErrorMatchNext("Body is null")

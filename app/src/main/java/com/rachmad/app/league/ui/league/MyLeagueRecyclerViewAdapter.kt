@@ -1,20 +1,20 @@
 package com.rachmad.app.league.ui.league
 
-import android.util.TypedValue
 import androidx.recyclerview.widget.RecyclerView
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.rachmad.app.league.GlideApp
 import com.rachmad.app.league.R
+import com.rachmad.app.league.ui.league.LeagueFragment.OnLeagueListFragmentListener
+import com.rachmad.app.league.GlideApp
 import com.rachmad.app.league.`object`.LeagueList
-import com.rachmad.app.league.ui.league.LeagueFragment.OnListFragmentInteractionListener
-import org.jetbrains.anko.*
-import org.jetbrains.anko.cardview.v7.cardView
+
+import kotlinx.android.synthetic.main.fragment_league.view.*
 
 class MyLeagueRecyclerViewAdapter(
-    private val mListener: OnListFragmentInteractionListener?
+    private val mListenerLeague: OnLeagueListFragmentListener?
 ) : RecyclerView.Adapter<MyLeagueRecyclerViewAdapter.ViewHolder>() {
 
     var leagueList: List<LeagueList> = ArrayList()
@@ -23,8 +23,14 @@ class MyLeagueRecyclerViewAdapter(
     init {
         mOnClickListener = View.OnClickListener { v ->
             val item = v.tag as LeagueList
-            mListener?.onListFragmentInteraction(item)
+            mListenerLeague?.onListFragmentInteraction(item)
         }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.fragment_league, parent, false)
+        return ViewHolder(view)
     }
 
     fun submitList(data: List<LeagueList>){
@@ -32,25 +38,21 @@ class MyLeagueRecyclerViewAdapter(
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LeagueItemData().createView(AnkoContext.create(parent.context, parent)))
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = with(holder) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = with(holder){
         val item = leagueList[position]
 
-        GlideApp.with(logo)
+        GlideApp.with(image)
             .load(item.strBadge)
             .fitCenter()
             .placeholder(R.drawable.no_image)
-            .into(logo)
+            .into(image)
 
         name.text = if(!item.strLeague.isNullOrBlank())
             item.strLeague
         else
             item.strLeagueAlternate
 
-        with(mView) {
+        with(holder.mView) {
             tag = item
             setOnClickListener(mOnClickListener)
         }
@@ -59,53 +61,7 @@ class MyLeagueRecyclerViewAdapter(
     override fun getItemCount(): Int = leagueList.size
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-        val logo: ImageView = mView.findViewById(LeagueItemData.imageLogo)
-        val name: TextView = mView.findViewById(LeagueItemData.name)
-    }
-
-    class LeagueItemData: AnkoComponent<ViewGroup> {
-        companion object {
-            const val imageLogo = 100
-            const val name = 101
-        }
-        override fun createView(ui: AnkoContext<ViewGroup>): View = with(ui){
-            cardView {
-                elevation = dip(3).toFloat()
-                radius = dip(8).toFloat()
-
-                lparams{
-                    width = matchParent
-                    height = wrapContent
-                    bottomMargin = dip(8)
-                    leftMargin = dip(8)
-                }
-                verticalLayout {
-                    lparams(matchParent, wrapContent)
-                    val outValue = TypedValue()
-                    context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
-                    backgroundResource = outValue.resourceId
-
-                    imageView {
-                        id = imageLogo
-                        adjustViewBounds = true
-                        scaleType = ImageView.ScaleType.FIT_CENTER
-                    }.lparams{
-                        width = matchParent
-                        height = dip(200)
-                        marginStart = 2
-                        marginEnd = 2
-                    }
-
-                    textView {
-                        id = name
-                        textAlignment = View.TEXT_ALIGNMENT_CENTER
-                    }.lparams{
-                        width = matchParent
-                        height = wrapContent
-                        margin = dip(8)
-                    }
-                }
-            }
-        }
+        val image: ImageView = mView.image
+        val name: TextView = mView.name
     }
 }

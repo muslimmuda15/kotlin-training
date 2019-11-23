@@ -2,35 +2,26 @@ package com.rachmad.app.league.ui.league
 
 import android.content.Context
 import android.os.Bundle
-import android.view.Gravity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import com.rachmad.app.league.ui.MainActivity
 import com.rachmad.app.league.R
-import com.rachmad.app.league.data.Connection
+import com.rachmad.app.league.ui.MainActivity
 import com.rachmad.app.league.`object`.LeagueList
+import com.rachmad.app.league.data.Connection
 import com.rachmad.app.league.viewmodel.LeagueViewModel
-import org.jetbrains.anko.*
-import org.jetbrains.anko.recyclerview.v7.recyclerView
-import org.jetbrains.anko.support.v4.UI
+import kotlinx.android.synthetic.main.fragment_league_list.*
+import kotlinx.android.synthetic.main.fragment_league_list.view.list
 
 class LeagueFragment : Fragment() {
-    private var listener: OnListFragmentInteractionListener? = null
+    private var listenerLeague: OnLeagueListFragmentListener? = null
     lateinit var viewModel: LeagueViewModel
-
-    var leagueList: RecyclerView? = null
-    var loadingLayout: LinearLayout? = null
-    var progressBar: ProgressBar? = null
-    var errorText: TextView? = null
 
     lateinit var adapterList: MyLeagueRecyclerViewAdapter
 
@@ -38,56 +29,21 @@ class LeagueFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val view = inflater.inflate(R.layout.fragment_league_list, container, false)
+
         viewModel = (activity as MainActivity).viewModel
-        adapterList = MyLeagueRecyclerViewAdapter(listener)
+        view.list.apply {
+            val manager = GridLayoutManager(context, 2)
+            adapterList = MyLeagueRecyclerViewAdapter(listenerLeague)
 
-        return UI {
-            frameLayout {
-                lparams(matchParent, matchParent)
-
-                recyclerView {
-                    id = list
-                    elevation = 1.0F
-                    val manager = GridLayoutManager(context, 2)
-                    layoutManager = manager
-                    adapter = adapterList
-                }.lparams{
-                    width = matchParent
-                    height = matchParent
-                    rightPadding = dip(8)
-                }
-
-                verticalLayout {
-                    id = loadingErrorLayout
-                    lparams(matchParent, matchParent)
-                    gravity = Gravity.CENTER
-                    elevation = 2.0F
-                    isFocusable = true
-                    isClickable = true
-                    backgroundColor = ContextCompat.getColor(this.context, R.color.white)
-
-                    progressBar {
-                        id = loading
-                        visibility = View.VISIBLE
-                    }.lparams(width = wrapContent, height = wrapContent)
-
-                    textView {
-                        id = errors
-                    }
-                }
-            }
-        }.view
+            layoutManager = manager
+            adapter = adapterList
+        }
+        return view
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        with(activity!!) {
-            leagueList = findViewById(list)
-            loadingLayout = findViewById(loadingErrorLayout)
-            progressBar = findViewById(loading)
-            errorText = findViewById(errors)
-        }
 
         val connection = viewModel.connectionLeagueList()
         viewModel.connectLeague()
@@ -103,34 +59,34 @@ class LeagueFragment : Fragment() {
         data?.let {
             when(it){
                 Connection.OK.Status -> {
-                    leagueList!!.visibility = RecyclerView.VISIBLE
+                    list.visibility = RecyclerView.VISIBLE
                     loadingLayout!!.visibility = ViewGroup.GONE
 
                     return true
                 }
                 Connection.ACCEPTED.Status -> {
-                    leagueList!!.visibility = RecyclerView.GONE
-                    loadingLayout!!.visibility = ViewGroup.VISIBLE
-                    progressBar!!.visibility = ProgressBar.VISIBLE
-                    errorText!!.visibility = TextView.GONE
+                    list.visibility = RecyclerView.GONE
+                    loadingLayout.visibility = ViewGroup.VISIBLE
+                    loading.visibility = ProgressBar.VISIBLE
+                    error.visibility = TextView.GONE
                     return false
                 }
                 Connection.ERROR.Status -> {
-                    leagueList!!.visibility = RecyclerView.GONE
-                    loadingLayout!!.visibility = ViewGroup.VISIBLE
-                    progressBar!!.visibility = ProgressBar.GONE
-                    errorText!!.visibility = TextView.VISIBLE
+                    list.visibility = RecyclerView.GONE
+                    loadingLayout.visibility = ViewGroup.VISIBLE
+                    loading.visibility = ProgressBar.GONE
+                    error.visibility = TextView.VISIBLE
 
-                    errorText!!.text = viewModel.errorLeagueList()?.status_message
+                    error.text = viewModel.errorLeagueList()?.status_message
                     return false
                 }
                 else -> {
-                    leagueList!!.visibility = RecyclerView.GONE
-                    loadingLayout!!.visibility = ViewGroup.VISIBLE
-                    progressBar!!.visibility = ProgressBar.GONE
-                    errorText!!.visibility = TextView.VISIBLE
+                    list.visibility = RecyclerView.GONE
+                    loadingLayout.visibility = ViewGroup.VISIBLE
+                    loading.visibility = ProgressBar.GONE
+                    error.visibility = TextView.VISIBLE
 
-                    errorText!!.text = getString(R.string.unknown_error)
+                    error.text = getString(R.string.unknown_error)
                     return false
                 }
             }
@@ -141,28 +97,24 @@ class LeagueFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is OnListFragmentInteractionListener) {
-            listener = context
+        if (context is OnLeagueListFragmentListener) {
+            listenerLeague = context
         } else {
-            throw RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener")
+            throw RuntimeException(context.toString() + " must implement OnLeagueListFragmentListener")
         }
     }
 
     override fun onDetach() {
         super.onDetach()
-        listener = null
+        listenerLeague = null
     }
 
-    interface OnListFragmentInteractionListener {
+    interface OnLeagueListFragmentListener {
+        // TODO: Update argument type and name
         fun onListFragmentInteraction(item: LeagueList)
     }
 
     companion object {
-        const val list = 1000
-        const val errors = 1001
-        const val loading = 1002
-        const val loadingErrorLayout = 1003
-
         @JvmStatic
         fun newInstance() = LeagueFragment()
     }
