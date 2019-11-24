@@ -40,7 +40,7 @@ class LeagueDetailsActivity : LeagueActivity(), MatchItemFragment.OnTabFragmentL
     lateinit var tabPagerAdapter: TabPagerAdapter
 
     override fun onListFragmentInteraction(item: MatchList) {
-
+        
     }
 
     private fun initialize(){

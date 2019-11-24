@@ -2,6 +2,8 @@ package com.rachmad.app.league.repository
 
 import androidx.lifecycle.MutableLiveData
 import com.rachmad.app.league.`object`.BaseMatchData
+import com.rachmad.app.league.`object`.BaseMatchDetails
+import com.rachmad.app.league.`object`.MatchDetails
 import com.rachmad.app.league.`object`.MatchList
 import com.rachmad.app.league.data.Connection
 import com.rachmad.app.league.data.ErrorData
@@ -101,5 +103,51 @@ class MatchRepository {
     private fun sendErrorMatchLast(message: String?) {
         errorMatchLast = ErrorData(Connection.ERROR.Status, message)
         connectionMatchLastList.postValue(Connection.ERROR.Status)
+    }
+
+    var connectionMatchDetails = MutableLiveData<Int>()
+    var errorMatchDetails: ErrorData? = null
+    var matchDetails: List<MatchDetails> = ArrayList()
+
+    fun matchDetails(id: Int) {
+        val service = LeagueSite.connect()
+        val call = service.matchDetails(id)
+
+        connectionMatchDetails.postValue(Connection.ACCEPTED.Status)
+        call!!.enqueue(object : Callback<BaseMatchDetails> {
+            override fun onFailure(call: Call<BaseMatchDetails>, t: Throwable) {
+                sendErrorMatchDetails(t.message)
+                t.printStackTrace()
+            }
+
+            override fun onResponse(
+                call: Call<BaseMatchDetails>,
+                response: Response<BaseMatchDetails>
+            ) {
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        it.events?.let {
+                            if (it.size > 0) {
+                                matchDetails = it
+                                connectionMatchDetails.postValue(Connection.OK.Status)
+                            } else {
+                                sendErrorMatchDetails("Data is empty")
+                            }
+                        } ?: run {
+                            sendErrorMatchDetails("Event is empty")
+                        }
+                    } ?: run {
+                        sendErrorMatchDetails("Body is null")
+                    }
+                } else {
+                    sendErrorMatchDetails("Response not successfull")
+                }
+            }
+        })
+    }
+
+    private fun sendErrorMatchDetails(message: String?) {
+        errorMatchDetails = ErrorData(Connection.ERROR.Status, message)
+        connectionMatchDetails.postValue(Connection.ERROR.Status)
     }
 }

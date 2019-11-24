@@ -2,6 +2,7 @@ package com.rachmad.app.league.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import com.rachmad.app.league.`object`.MatchDetails
 import com.rachmad.app.league.`object`.MatchList
 import com.rachmad.app.league.data.ErrorData
 import com.rachmad.app.league.repository.MatchRepository
@@ -18,4 +19,9 @@ class MatchViewModel: ViewModel() {
     fun matchLastList(): List<MatchList> = matchRepository.matchLastList
     fun errorMatchLast(): ErrorData? = matchRepository.errorMatchLast
     fun matchLast(id: Int) = matchRepository.matchLast(id)
+
+    fun connectionMatchDetails(): LiveData<Int> = matchRepository.connectionMatchDetails
+    fun matchDetailsList(): List<MatchDetails> = matchRepository.matchDetails
+    fun errorMatchDetails(): ErrorData? = matchRepository.errorMatchDetails
+    fun matchDetails(id: Int) = matchRepository.matchDetails(id)
 }

@@ -45,11 +45,11 @@ class MatchItemFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_match_item_list, container, false)
 
+        val manager = GridLayoutManager(context, 2)
+        adapterList = MyMatchItemRecyclerViewAdapter(this, listener)
+
         viewModel = (activity as LeagueDetailsActivity).matchViewModel
         view.list.apply {
-            val manager = GridLayoutManager(context, 2)
-            adapterList = MyMatchItemRecyclerViewAdapter(listener)
-
             layoutManager = manager
             adapter = adapterList
         }
