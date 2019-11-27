@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
 import com.rachmad.app.league.R
+import com.rachmad.app.league.helper.ui.AnimatedExpandableListView
 import kotlinx.android.synthetic.main.custom_match_list.view.*
 import kotlinx.android.synthetic.main.custom_sub_match_list.view.*
 import kotlinx.android.synthetic.main.custom_sub_match_list.view.away_count
@@ -17,7 +18,8 @@ class MatchDetailsListAdapter(
     val subHomeList: HashMap<String, List<String>>,
     val subAwayList: HashMap<String, List<String>>,
     val statusList: List<String>
-): BaseExpandableListAdapter() {
+): AnimatedExpandableListView.AnimatedExpandableListAdapter() {
+
     override fun getChild(listPosition: Int, expandedListPosition: Int): Any {
         var home = ""
         var away = ""
@@ -42,7 +44,7 @@ class MatchDetailsListAdapter(
         return expandedListPosition.toLong()
     }
 
-    override fun getChildView(listPosition: Int, expandedListPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup?): View {
+    override fun getRealChildView(listPosition: Int, expandedListPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup?): View {
         val dataText: String = getChild(listPosition, expandedListPosition) as String
         val dataArray = dataText.split("|")
 
@@ -53,7 +55,7 @@ class MatchDetailsListAdapter(
         return view
     }
 
-    override fun getChildrenCount(listPosition: Int): Int {
+    override fun getRealChildrenCount(listPosition: Int): Int {
         val home = subHomeList.get(statusList.get(listPosition))?.size ?: 0
         val away = subAwayList.get(statusList.get(listPosition))?.size ?: 0
         if(home > away)

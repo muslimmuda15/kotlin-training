@@ -130,13 +130,13 @@ class MatchDetailsActivity : AppCompatActivity() {
         val adapter = MatchDetailsListAdapter(this, subHome, subAway, status)
         info_list.setAdapter(adapter)
 
-//        info_list.setOnGroupClickListener { parent, view, groupPosition, id ->
-//            if(info_list.isGroupExpanded((groupPosition)))
-//                info_list.collapseGroupWithAnimation(groupPosition)
-//            else
-//                info_list.expandGroupWithAnimation(groupPosition)
-//            true
-//        }
+        info_list.setOnGroupClickListener { parent, view, groupPosition, id ->
+            if(info_list.isGroupExpanded((groupPosition)))
+                info_list.collapseGroupWithAnimation(groupPosition)
+            else
+                info_list.expandGroupWithAnimation(groupPosition)
+            true
+        }
     }
 
     private fun checkConnection(data: Int?): Boolean{
