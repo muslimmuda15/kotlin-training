@@ -24,4 +24,9 @@ class MatchViewModel: ViewModel() {
     fun matchDetailsList(): List<MatchDetails> = matchRepository.matchDetails
     fun errorMatchDetails(): ErrorData? = matchRepository.errorMatchDetails
     fun matchDetails(id: Int) = matchRepository.matchDetails(id)
+
+    fun connectionMatchSearch(): LiveData<Int> = matchRepository.connectionMatchSearch
+    fun matchSearchList(): List<MatchDetails> = matchRepository.matchSearch
+    fun errorMatchSearch(): ErrorData? = matchRepository.errorMatchSearch
+    fun matchSearch(search: String) = matchRepository.matchSearch(search)
 }

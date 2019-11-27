@@ -42,7 +42,7 @@ data class MatchList(
     val strTime: String?,
     val idHomeTeam: String?,
     val idAwayTeam: String?
-): Serializable
+)
 
 data class BaseMatchDetails(
     val events: List<MatchDetails>?
@@ -58,6 +58,8 @@ data class MatchDetails(
     val strSeason: String?,
     val strHomeTeam: String?,
     val strAwayTeam: String?,
+    val idHomeTeam: String?,
+    val idAwayTeam: String?,
     val intHomeScore: String?,
     val intRound: String?,
     val intAwayScore: String?,
@@ -86,6 +88,10 @@ data class MatchDetails(
     val strTime: String?
 )
 
+data class BaseMatchSearch(
+    val event: List<MatchDetails>?
+)
+
 data class BaseTeamData(
     val teams: List<TeamData>?
 )
@@ -95,3 +101,4 @@ data class TeamData(
     val strTeam: String?,
     val strTeamBadge: String?
 )
+

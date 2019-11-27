@@ -17,4 +17,17 @@ object Utils {
             return ""
         }
     }
+
+    fun timeFormat(input: String): String {
+        try {
+            var df = SimpleDateFormat("hh:mm:ss", Locale.US)
+            df.timeZone = TimeZone.getTimeZone("GMT")
+            val newDate = df.parse(input)
+            df = SimpleDateFormat("hh:mm a", Locale.US)
+            return df.format(newDate) ?: ""
+        } catch (e: Exception){
+            e.printStackTrace()
+            return ""
+        }
+    }
 }

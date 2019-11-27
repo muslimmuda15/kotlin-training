@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
+import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.ProgressBar
@@ -25,12 +26,18 @@ import com.rachmad.app.league.helper.Utils
 import com.rachmad.app.league.ui.match.ARG_ID
 import com.rachmad.app.league.ui.match.ARG_POSITION
 import com.rachmad.app.league.ui.match.MatchItemFragment
+import com.rachmad.app.league.ui.match.details.AWAY_PATH
+import com.rachmad.app.league.ui.match.details.HOME_PATH
+import com.rachmad.app.league.ui.match.details.MATCH_ID
+import com.rachmad.app.league.ui.match.details.MatchDetailsActivity
+import com.rachmad.app.league.ui.search.SearchMatchActivity
 import com.rachmad.app.league.viewmodel.MatchViewModel
 import kotlinx.android.synthetic.main.activity_league_details.*
+import org.jetbrains.anko.intentFor
+import org.jetbrains.anko.singleTop
 
 const val LEAGUE_ID = "id"
 class LeagueDetailsActivity : LeagueActivity(), MatchItemFragment.OnTabFragmentListener {
-    var toolbarHeight = -1
     var idLeague: Int = 0
 
     val matchViewModel: MatchViewModel by lazy { ViewModelProviders.of(this).get(
@@ -39,24 +46,16 @@ class LeagueDetailsActivity : LeagueActivity(), MatchItemFragment.OnTabFragmentL
 
     lateinit var tabPagerAdapter: TabPagerAdapter
 
-    override fun onListFragmentInteraction(item: MatchList) {
-        
+    override fun onListFragmentInteraction(item: MatchList, homeImage: String?, awayImage: String?) {
+        startActivity(intentFor<MatchDetailsActivity>(
+            MATCH_ID to item.idEvent?.toInt(),
+            HOME_PATH to homeImage,
+            AWAY_PATH to awayImage).singleTop())
     }
 
     private fun initialize(){
-        val tv = TypedValue()
-        if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
-            toolbarHeight = TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics());
-        }
-
         match_tab.addTab(match_tab.newTab().setText(getString(R.string.last_match)))
         match_tab.addTab(match_tab.newTab().setText(getString(R.string.next_match)))
-
-        val collapsible = collapsing_toolbar.layoutParams as AppBarLayout.LayoutParams
-        val tab = match_tab.layoutParams as AppBarLayout.LayoutParams
-
-        collapsible.setMargins(0,0,0, toolbarHeight * -1)
-        tab.setMargins(0, toolbarHeight + 1, 0, 0)
 
         supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -174,6 +173,9 @@ class LeagueDetailsActivity : LeagueActivity(), MatchItemFragment.OnTabFragmentL
             android.R.id.home -> {
                 finish()
             }
+            R.id.search -> {
+                startActivity(intentFor<SearchMatchActivity>().singleTop())
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -190,5 +192,10 @@ class LeagueDetailsActivity : LeagueActivity(), MatchItemFragment.OnTabFragmentL
         }
 
         override fun getCount(): Int = countTabs
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.activity_menu, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 }

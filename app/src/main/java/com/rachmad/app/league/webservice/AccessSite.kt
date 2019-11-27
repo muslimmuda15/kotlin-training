@@ -34,4 +34,9 @@ interface AccessSite {
     fun teamSite(
         @Query("id") id: Int
     ): Call<BaseTeamData>
+
+    @GET("/api/v1/json/1/searchevents.php")
+    fun searchAllMatch(
+        @Query("e") search: String
+    ): Call<BaseMatchSearch>
 }

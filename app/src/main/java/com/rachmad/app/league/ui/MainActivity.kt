@@ -1,6 +1,7 @@
 package com.rachmad.app.league.ui
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.fragment.app.commitNow
 import com.rachmad.app.league.R
 import com.rachmad.app.league.ui.league.LeagueFragment
@@ -20,8 +21,21 @@ class MainActivity : LeagueActivity(), LeagueFragment.OnLeagueListFragmentListen
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+//        supportActionBar?.setDisplayShowHomeEnabled(true)
+//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+//        supportActionBar?.setDisplayShowTitleEnabled(true)
+
         supportFragmentManager.commitNow {
             add(R.id.container, LeagueFragment.newInstance())
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            android.R.id.home -> {
+                finish()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

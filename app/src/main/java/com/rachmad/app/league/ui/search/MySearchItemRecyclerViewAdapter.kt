@@ -1,4 +1,4 @@
-package com.rachmad.app.league.ui.match
+package com.rachmad.app.league.ui.search
 
 import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
@@ -8,40 +8,37 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.Observer
 import com.rachmad.app.league.GlideApp
 import com.rachmad.app.league.R
-import com.rachmad.app.league.`object`.MatchList
+import com.rachmad.app.league.`object`.MatchDetails
 import com.rachmad.app.league.data.Connection
 import com.rachmad.app.league.repository.LeagueRepository
 
-import com.rachmad.app.league.ui.match.MatchItemFragment.OnTabFragmentListener
+import com.rachmad.app.league.ui.search.SearchItemFragment.OnSearchMatchListener
 
-import kotlinx.android.synthetic.main.fragment_match_item.view.*
+import kotlinx.android.synthetic.main.fragment_search_item.view.*
 
-class MyMatchItemRecyclerViewAdapter(
+class MySearchItemRecyclerViewAdapter(
     private val fr: Fragment,
-    private val mListener: OnTabFragmentListener?
-) : RecyclerView.Adapter<MyMatchItemRecyclerViewAdapter.ViewHolder>() {
+    private val mListener: OnSearchMatchListener?
+) : RecyclerView.Adapter<MySearchItemRecyclerViewAdapter.ViewHolder>() {
 
-    var matchList: List<MatchList> = ArrayList()
+    var list: List<MatchDetails> = ArrayList()
 
-    fun submitList(data: List<MatchList>){
-        matchList = data
+    fun submitList(data: List<MatchDetails>) {
+        list = data
         notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.fragment_match_item, parent, false)
+            .inflate(R.layout.fragment_search_item, parent, false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = with(holder) {
-        val item = matchList[position]
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = with(holder){
+        val item = list[position]
 
         val leagueRepository = LeagueRepository()
         val connection = leagueRepository.connectionTeamData
@@ -75,15 +72,14 @@ class MyMatchItemRecyclerViewAdapter(
         awayName.text = item.strAwayTeam
         score.text = "${item.intHomeScore ?: 0} - ${item.intAwayScore ?: 0}"
 
-        mView.setOnClickListener{
+        holder.mView.setOnClickListener{
             mListener?.onListFragmentInteraction(item, leagueRepository.teamData?.strTeamBadge, leagueRepository2.teamData?.strTeamBadge)
         }
     }
 
-    override fun getItemCount(): Int = matchList.size
+    override fun getItemCount(): Int = list.size
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-
         val homeImage: ImageView = mView.home_image
         val awayImage: ImageView = mView.away_image
         val homeName: TextView = mView.home_name

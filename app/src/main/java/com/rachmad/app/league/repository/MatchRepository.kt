@@ -1,10 +1,7 @@
 package com.rachmad.app.league.repository
 
 import androidx.lifecycle.MutableLiveData
-import com.rachmad.app.league.`object`.BaseMatchData
-import com.rachmad.app.league.`object`.BaseMatchDetails
-import com.rachmad.app.league.`object`.MatchDetails
-import com.rachmad.app.league.`object`.MatchList
+import com.rachmad.app.league.`object`.*
 import com.rachmad.app.league.data.Connection
 import com.rachmad.app.league.data.ErrorData
 import com.rachmad.app.league.webservice.LeagueSite
@@ -149,5 +146,48 @@ class MatchRepository {
     private fun sendErrorMatchDetails(message: String?) {
         errorMatchDetails = ErrorData(Connection.ERROR.Status, message)
         connectionMatchDetails.postValue(Connection.ERROR.Status)
+    }
+
+    var connectionMatchSearch = MutableLiveData<Int>()
+    var errorMatchSearch: ErrorData? = null
+    var matchSearch: List<MatchDetails> = ArrayList()
+
+    fun matchSearch(search: String) {
+        val service = LeagueSite.connect()
+        val call = service.searchAllMatch(search)
+
+        connectionMatchSearch.postValue(Connection.ACCEPTED.Status)
+        call!!.enqueue(object : Callback<BaseMatchSearch> {
+            override fun onFailure(call: Call<BaseMatchSearch>, t: Throwable) {
+                sendErrorMatchSearch(t.message)
+                t.printStackTrace()
+            }
+
+            override fun onResponse(call: Call<BaseMatchSearch>, response: Response<BaseMatchSearch>) {
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        it.event?.let {
+                            if (it.size > 0) {
+                                matchSearch = it
+                                connectionMatchSearch.postValue(Connection.OK.Status)
+                            } else {
+                                sendErrorMatchSearch("Data is empty")
+                            }
+                        } ?: run {
+                            sendErrorMatchSearch("Event is empty")
+                        }
+                    } ?: run {
+                        sendErrorMatchSearch("Body is null")
+                    }
+                } else {
+                    sendErrorMatchSearch("Response not successfull")
+                }
+            }
+        })
+    }
+
+    private fun sendErrorMatchSearch(message: String?) {
+        errorMatchSearch = ErrorData(Connection.ERROR.Status, message)
+        connectionMatchSearch.postValue(Connection.ERROR.Status)
     }
 }

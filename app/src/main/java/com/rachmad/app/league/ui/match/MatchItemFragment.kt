@@ -140,8 +140,7 @@ class MatchItemFragment : Fragment() {
     }
 
     interface OnTabFragmentListener {
-        // TODO: Update argument type and name
-        fun onListFragmentInteraction(item: MatchList)
+        fun onListFragmentInteraction(item: MatchList, homeImage: String?, awayImage: String?)
     }
 
     companion object {
