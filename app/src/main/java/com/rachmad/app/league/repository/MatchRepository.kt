@@ -168,8 +168,14 @@ class MatchRepository {
                     response.body()?.let {
                         it.event?.let {
                             if (it.size > 0) {
-                                matchSearch = it
-                                connectionMatchSearch.postValue(Connection.OK.Status)
+                                val data = it.filter { it.strSport == "Soccer" }
+                                if(data.size > 0) {
+                                    matchSearch = it
+                                    connectionMatchSearch.postValue(Connection.OK.Status)
+                                }
+                                else{
+                                    sendErrorMatchSearch("Data is empty")
+                                }
                             } else {
                                 sendErrorMatchSearch("Data is empty")
                             }
