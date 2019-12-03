@@ -1,9 +1,7 @@
 package com.rachmad.app.league.ui.league.details
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
@@ -15,7 +13,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayout
 import com.rachmad.app.league.GlideApp
 import com.rachmad.app.league.LeagueActivity
@@ -23,13 +20,12 @@ import com.rachmad.app.league.R
 import com.rachmad.app.league.`object`.MatchList
 import com.rachmad.app.league.data.Connection
 import com.rachmad.app.league.helper.Utils
-import com.rachmad.app.league.ui.match.ARG_ID
-import com.rachmad.app.league.ui.match.ARG_POSITION
 import com.rachmad.app.league.ui.match.MatchItemFragment
 import com.rachmad.app.league.ui.match.details.AWAY_PATH
 import com.rachmad.app.league.ui.match.details.HOME_PATH
 import com.rachmad.app.league.ui.match.details.MATCH_ID
 import com.rachmad.app.league.ui.match.details.MatchDetailsActivity
+import com.rachmad.app.league.ui.match.favorite.FavoriteMatchActivity
 import com.rachmad.app.league.ui.search.SearchMatchActivity
 import com.rachmad.app.league.viewmodel.MatchViewModel
 import kotlinx.android.synthetic.main.activity_league_details.*
@@ -176,6 +172,9 @@ class LeagueDetailsActivity : LeagueActivity(), MatchItemFragment.OnTabFragmentL
             R.id.search -> {
                 startActivity(intentFor<SearchMatchActivity>().singleTop())
             }
+            R.id.favorite -> {
+                startActivity(intentFor<FavoriteMatchActivity>().singleTop())
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -183,12 +182,7 @@ class LeagueDetailsActivity : LeagueActivity(), MatchItemFragment.OnTabFragmentL
     inner class TabPagerAdapter(fm: FragmentManager, val countTabs: Int): FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT){
         override fun getItem(position: Int): Fragment {
             Log.d("main", "POSITION : " + position)
-            return MatchItemFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_POSITION, position)
-                    putInt(ARG_ID, idLeague)
-                }
-            }
+            return MatchItemFragment.newInstance(false, position, idLeague)
         }
 
         override fun getCount(): Int = countTabs

@@ -1,14 +1,30 @@
 package com.rachmad.app.league.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.rachmad.app.league.App
 import com.rachmad.app.league.`object`.MatchDetails
 import com.rachmad.app.league.`object`.MatchList
 import com.rachmad.app.league.data.ErrorData
+import com.rachmad.app.league.helper.ui.DatabaseHelper
 import com.rachmad.app.league.repository.MatchRepository
+import com.rachmad.app.league.sqlite.MatchDB
+import com.rachmad.app.league.sqlite.Query
 
 class MatchViewModel: ViewModel() {
     val matchRepository = MatchRepository()
+    val query = Query()
+    val matchLiveList = MutableLiveData<List<MatchList>>()
+
+    fun insertMatch(data: MatchDetails) = query.insertMatch(data)
+    fun getMatch(id: String) = query.getMatch(id)
+    private fun getMatchList() = query.matchList()
+
+    fun updateDatabase(){
+        matchLiveList.postValue(getMatchList())
+    }
 
     fun connectionMatchNext(): LiveData<Int> = matchRepository.connectionMatchNextList
     fun matchNextList(): List<MatchList> = matchRepository.matchNextList

@@ -2,21 +2,32 @@ package com.rachmad.app.league.ui.match.details
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Contacts
 import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import com.rachmad.app.league.GlideApp
 import com.rachmad.app.league.R
+import com.rachmad.app.league.`object`.MatchDetails
 import com.rachmad.app.league.data.Connection
 import com.rachmad.app.league.helper.Utils
+import com.rachmad.app.league.helper.ui.DatabaseHelper
+import com.rachmad.app.league.helper.ui.DatabaseHelper.TABLE_MATCH
+import com.rachmad.app.league.ui.match.favorite.FavoriteMatchActivity
 import com.rachmad.app.league.ui.search.SearchMatchActivity
 import com.rachmad.app.league.viewmodel.MatchViewModel
 import kotlinx.android.synthetic.main.activity_match_details.*
+import org.jetbrains.anko.db.MapRowParser
+import org.jetbrains.anko.db.insert
+import org.jetbrains.anko.db.parseSingle
+import org.jetbrains.anko.db.select
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 import java.util.*
@@ -39,6 +50,7 @@ class MatchDetailsActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(true)
+        supportActionBar?.title = getString(R.string.match_details)
 
         idMatch = intent.getIntExtra(MATCH_ID, 0)
         val homeImage = intent.getStringExtra(HOME_PATH)
@@ -71,6 +83,9 @@ class MatchDetailsActivity : AppCompatActivity() {
             R.id.search -> {
                 startActivity(intentFor<SearchMatchActivity>().singleTop())
             }
+            R.id.favorite -> {
+                startActivity(intentFor<FavoriteMatchActivity>().singleTop())
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -84,10 +99,11 @@ class MatchDetailsActivity : AppCompatActivity() {
     private fun loadData(){
         val data = viewModel.matchDetailsList()[0]
 
-        supportActionBar?.title = data.strFilename
+        champion_name.text = data.strLeague
+        round.text = data.intRound
 
-        var subHome = HashMap<String, List<String>>()
-        var subAway = HashMap<String, List<String>>()
+        val subHome = HashMap<String, List<String>>()
+        val subAway = HashMap<String, List<String>>()
 
         home_name.text = data.strHomeTeam
         away_name.text = data.strAwayTeam
@@ -137,6 +153,27 @@ class MatchDetailsActivity : AppCompatActivity() {
                 info_list.expandGroupWithAnimation(groupPosition)
             true
         }
+
+        favorite_button.setOnClickListener {
+            insertData(data)
+            Toast.makeText(this, "You have like " + data.strEvent, Toast.LENGTH_SHORT).show()
+        }
+
+        selectData(data)
+    }
+
+    private fun selectData(data: MatchDetails){
+        favorite_button.setImageResource(
+            if(viewModel.getMatch(data.idEvent ?: "0"))
+                R.drawable.ic_favorite_black_24dp
+            else
+                R.drawable.ic_favorite_border_black_24dp
+        )
+    }
+
+    private fun insertData(data: MatchDetails){
+        viewModel.insertMatch(data)
+        favorite_button.setImageResource(R.drawable.ic_favorite_black_24dp)
     }
 
     private fun checkConnection(data: Int?): Boolean{

@@ -50,7 +50,7 @@ data class BaseMatchDetails(
 
 data class MatchDetails(
     val idEvent: String?,
-    val strEvent: String?,
+    var strEvent: String?,
     val strEventAlternate: String?,
     val strFilename: String?,
     val strSport: String?,
@@ -85,8 +85,48 @@ data class MatchDetails(
     val intHomeShots: String?,
     val intAwayShots: String?,
     val dateEvent: String?,
-    val strTime: String?
-)
+    val strTime: String?,
+    val strThumb: String?
+){
+    constructor(): this(null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null)
+}
 
 data class BaseMatchSearch(
     val event: List<MatchDetails>?

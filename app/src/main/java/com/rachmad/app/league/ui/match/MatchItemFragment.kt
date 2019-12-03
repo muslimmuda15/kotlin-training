@@ -16,24 +16,33 @@ import com.rachmad.app.league.R
 import com.rachmad.app.league.`object`.MatchList
 import com.rachmad.app.league.data.Connection
 import com.rachmad.app.league.ui.league.details.LeagueDetailsActivity
+import com.rachmad.app.league.ui.match.favorite.FavoriteMatchActivity
 import com.rachmad.app.league.viewmodel.MatchViewModel
 import kotlinx.android.synthetic.main.fragment_match_item_list.*
 import kotlinx.android.synthetic.main.fragment_match_item_list.view.*
 import kotlinx.android.synthetic.main.fragment_match_item_list.view.list
 
+const val ARG_FAVORITE = "favoritematch"
 const val ARG_POSITION = "position"
 const val ARG_ID = "id"
 class MatchItemFragment : Fragment() {
+    private var isFavorite = false
     private var position = -1
     private var idLeague = 0
     private var listener: OnTabFragmentListener? = null
     lateinit var adapterList: MyMatchItemRecyclerViewAdapter
     lateinit var viewModel: MatchViewModel
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.updateDatabase()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
+            isFavorite = it.getBoolean(ARG_FAVORITE)
             position = it.getInt(ARG_POSITION)
             idLeague = it.getInt(ARG_ID)
         }
@@ -48,7 +57,11 @@ class MatchItemFragment : Fragment() {
         val manager = GridLayoutManager(context, 2)
         adapterList = MyMatchItemRecyclerViewAdapter(this, listener)
 
-        viewModel = (activity as LeagueDetailsActivity).matchViewModel
+        if(activity is LeagueDetailsActivity)
+            viewModel = (activity as LeagueDetailsActivity).matchViewModel
+        else if(activity is FavoriteMatchActivity)
+            viewModel = (activity as FavoriteMatchActivity).matchViewModel
+
         view.list.apply {
             layoutManager = manager
             adapter = adapterList
@@ -59,24 +72,44 @@ class MatchItemFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        when(position){
-            0 -> {
-                val connection = viewModel.connectionMatchLast()
-                viewModel.matchLast(idLeague)
+        if(isFavorite){
+            viewModel.matchLiveList.observe(this, Observer {
+                if(it.size > 0) {
+                    list.visibility = RecyclerView.VISIBLE
+                    loading_layout.visibility = ViewGroup.GONE
 
-                connection.observe(this, Observer<Int> {
-                    if (checkConnection(it))
-                        adapterList.submitList(viewModel.matchLastList())
-                })
-            }
-            1 -> {
-                val connection = viewModel.connectionMatchNext()
-                viewModel.matchNext(idLeague)
+                    adapterList.submitList(it)
+                }
+                else{
+                    list.visibility = RecyclerView.GONE
+                    loading_layout.visibility = ViewGroup.VISIBLE
+                    loading.visibility = ProgressBar.GONE
+                    error_text.visibility = TextView.VISIBLE
 
-                connection.observe(this, Observer<Int> {
-                    if (checkConnection(it))
-                        adapterList.submitList(viewModel.matchNextList())
-                })
+                    error_text.text = getString(R.string.no_favorite)
+                }
+            })
+        }
+        else {
+            when (position) {
+                0 -> {
+                    val connection = viewModel.connectionMatchLast()
+                    viewModel.matchLast(idLeague)
+
+                    connection.observe(this, Observer<Int> {
+                        if (checkConnection(it))
+                            adapterList.submitList(viewModel.matchLastList())
+                    })
+                }
+                1 -> {
+                    val connection = viewModel.connectionMatchNext()
+                    viewModel.matchNext(idLeague)
+
+                    connection.observe(this, Observer<Int> {
+                        if (checkConnection(it))
+                            adapterList.submitList(viewModel.matchNextList())
+                    })
+                }
             }
         }
     }
@@ -144,16 +177,13 @@ class MatchItemFragment : Fragment() {
     }
 
     companion object {
-
-        // TODO: Customize parameter argument names
-        const val ARG_COLUMN_COUNT = "column-count"
-
-        // TODO: Customize parameter initialization
         @JvmStatic
-        fun newInstance(columnCount: Int) =
+        fun newInstance(isFavorite: Boolean, position: Int, idLeague: Int) =
             MatchItemFragment().apply {
                 arguments = Bundle().apply {
-                    putInt(ARG_COLUMN_COUNT, columnCount)
+                    putBoolean(ARG_FAVORITE, isFavorite)
+                    putInt(ARG_POSITION, position)
+                    putInt(ARG_ID, idLeague)
                 }
             }
     }

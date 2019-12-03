@@ -5,5 +5,10 @@
     <string name="last_match">Last Match</string>
     <string name="next_match">Next Match</string>
     <string name="search_hint">Search all about soccer</string>
+    <string name="match_details">Match Details</string>
+    <string name="home">Home</string>
+    <string name="away">Away</string>
     <string name="search">Search</string>
+    <string name="favorite">Favorite</string>
+    <string name="no_favorite">You have no favorite this time</string>
 </resources>
