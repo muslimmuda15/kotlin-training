@@ -11,4 +11,8 @@
     <string name="search">Search</string>
     <string name="favorite">Favorite</string>
     <string name="no_favorite">You have no favorite this time</string>
+    <string name="unfavorite_title">Unfavorite</string>
+    <string name="unfavorite_description">Are you sure to unfavorite?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

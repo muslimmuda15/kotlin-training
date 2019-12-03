@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
+import com.app.rachmad.movie.ui.helper.UnfavoriteDialog
 import com.rachmad.app.league.GlideApp
 import com.rachmad.app.league.R
 import com.rachmad.app.league.`object`.MatchDetails
@@ -39,6 +40,7 @@ const val HOME_PATH = "HomePath"
 const val AWAY_PATH = "AwayPath"
 class MatchDetailsActivity : AppCompatActivity() {
     var idMatch = 0
+    var isFavorite = false
     val viewModel: MatchViewModel by lazy { ViewModelProviders.of(this).get(
         MatchViewModel::class.java)
     }
@@ -155,20 +157,32 @@ class MatchDetailsActivity : AppCompatActivity() {
         }
 
         favorite_button.setOnClickListener {
-            insertData(data)
-            Toast.makeText(this, "You have like " + data.strEvent, Toast.LENGTH_SHORT).show()
+            if(isFavorite) {
+                val unFavorite = UnfavoriteDialog(this, viewModel, data.idEvent!!)
+                unFavorite.show()
+                unFavorite.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            }
+            else {
+                insertData(data)
+                viewModel.updateMatchDetails(data.idEvent ?: "0")
+                Toast.makeText(this, "You have like " + data.strEvent, Toast.LENGTH_SHORT).show()
+            }
         }
 
+        viewModel.updateMatchDetails(data.idEvent ?: "0")
         selectData(data)
     }
 
     private fun selectData(data: MatchDetails){
-        favorite_button.setImageResource(
-            if(viewModel.getMatch(data.idEvent ?: "0"))
-                R.drawable.ic_favorite_black_24dp
-            else
-                R.drawable.ic_favorite_border_black_24dp
-        )
+        viewModel.matchDetailsStorage.observe(this, Observer<Boolean> {
+            isFavorite = it
+            favorite_button.setImageResource(
+                if(it)
+                    R.drawable.ic_favorite_black_24dp
+                else
+                    R.drawable.ic_favorite_border_black_24dp
+            )
+        })
     }
 
     private fun insertData(data: MatchDetails){

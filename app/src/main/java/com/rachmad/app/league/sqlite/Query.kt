@@ -5,10 +5,7 @@ import com.rachmad.app.league.`object`.MatchDetails
 import com.rachmad.app.league.`object`.MatchList
 import com.rachmad.app.league.helper.ui.DatabaseHelper
 import com.rachmad.app.league.helper.ui.DatabaseHelper.TABLE_MATCH
-import org.jetbrains.anko.db.classParser
-import org.jetbrains.anko.db.insert
-import org.jetbrains.anko.db.parseList
-import org.jetbrains.anko.db.select
+import org.jetbrains.anko.db.*
 
 class Query {
     private val database: MatchDB
@@ -46,6 +43,12 @@ class Query {
                 else
                     false
             }
+        }
+    }
+
+    fun deleteMatch(id: String){
+        database.use {
+            delete(TABLE_MATCH, "idEvent = {idEvent}", "idEvent" to id)
         }
     }
 

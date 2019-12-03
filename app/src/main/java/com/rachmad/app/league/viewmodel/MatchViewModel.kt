@@ -17,11 +17,18 @@ class MatchViewModel: ViewModel() {
     val matchRepository = MatchRepository()
     val query = Query()
     val matchLiveList = MutableLiveData<List<MatchList>>()
+    val matchDetailsStorage = MutableLiveData<Boolean>()
 
     fun insertMatch(data: MatchDetails) = query.insertMatch(data)
-    fun getMatch(id: String) = query.getMatch(id)
-    private fun getMatchList() = query.matchList()
 
+    private fun getMatch(id: String) = query.getMatch(id)
+    fun updateMatchDetails(id: String){
+        matchDetailsStorage.postValue(getMatch(id))
+    }
+
+    fun deleteMatch(id: String) = query.deleteMatch(id)
+
+    private fun getMatchList() = query.matchList()
     fun updateDatabase(){
         matchLiveList.postValue(getMatchList())
     }
