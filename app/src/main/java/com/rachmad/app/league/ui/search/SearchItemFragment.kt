@@ -6,7 +6,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -21,7 +20,7 @@ import com.rachmad.app.league.`object`.MatchDetails
 import com.rachmad.app.league.data.Connection
 import com.rachmad.app.league.viewmodel.MatchViewModel
 import kotlinx.android.synthetic.main.fragment_search_item_list.*
-import kotlinx.android.synthetic.main.fragment_search_item_list.view.list
+import kotlinx.android.synthetic.main.fragment_search_item_list.view.*
 
 class SearchItemFragment : Fragment() {
     private var listener: OnSearchMatchListener? = null
@@ -40,7 +39,7 @@ class SearchItemFragment : Fragment() {
 
         viewModel = (activity as SearchMatchActivity).viewModel
 
-        view.list.apply {
+        view.search_match_list.apply {
             layoutManager = manager
             adapter = adapterList
         }
@@ -53,7 +52,7 @@ class SearchItemFragment : Fragment() {
         loading_layout.visibility = ViewGroup.VISIBLE
         loading.visibility = View.GONE
         error.visibility = View.VISIBLE
-        list.visibility = ViewGroup.GONE
+        search_match_list.visibility = ViewGroup.GONE
 
         onSearch()
     }
@@ -73,7 +72,7 @@ class SearchItemFragment : Fragment() {
                     loading_layout.visibility = ViewGroup.GONE
                     loading.visibility = View.GONE
                     error.visibility = View.GONE
-                    list.visibility = ViewGroup.VISIBLE
+                    search_match_list.visibility = ViewGroup.VISIBLE
 
                     adapterList.submitList(viewModel.matchSearchList())
                 }
@@ -106,7 +105,7 @@ class SearchItemFragment : Fragment() {
                     loading_layout.visibility = ViewGroup.GONE
                     loading.visibility = View.GONE
                     error.visibility = View.GONE
-                    list.visibility = ViewGroup.VISIBLE
+                    search_match_list.visibility = ViewGroup.VISIBLE
 
                     adapterList.submitList(viewModel.matchSearchList())
                     true
@@ -125,20 +124,20 @@ class SearchItemFragment : Fragment() {
         data?.let {
             when(it){
                 Connection.OK.Status -> {
-                    list.visibility = RecyclerView.VISIBLE
+                    search_match_list.visibility = RecyclerView.VISIBLE
                     loading_layout!!.visibility = ViewGroup.GONE
 
                     return true
                 }
                 Connection.ACCEPTED.Status -> {
-                    list.visibility = RecyclerView.GONE
+                    search_match_list.visibility = RecyclerView.GONE
                     loading_layout.visibility = ViewGroup.VISIBLE
                     loading.visibility = ProgressBar.VISIBLE
                     error.visibility = TextView.GONE
                     return false
                 }
                 Connection.ERROR.Status -> {
-                    list.visibility = RecyclerView.GONE
+                    search_match_list.visibility = RecyclerView.GONE
                     loading_layout.visibility = ViewGroup.VISIBLE
                     loading.visibility = ProgressBar.GONE
                     error.visibility = TextView.VISIBLE
@@ -147,7 +146,7 @@ class SearchItemFragment : Fragment() {
                     return false
                 }
                 else -> {
-                    list.visibility = RecyclerView.GONE
+                    search_match_list.visibility = RecyclerView.GONE
                     loading_layout.visibility = ViewGroup.VISIBLE
                     loading.visibility = ProgressBar.GONE
                     error.visibility = TextView.VISIBLE

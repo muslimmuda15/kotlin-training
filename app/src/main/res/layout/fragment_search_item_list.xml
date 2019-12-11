@@ -39,7 +39,7 @@
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/list"
+            android:id="@+id/search_match_list"
             android:name="com.rachmad.app.league.ui.search.SearchItemFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.rachmad.app.league.`object`.*
 import com.rachmad.app.league.data.Connection
 import com.rachmad.app.league.data.ErrorData
+import com.rachmad.app.league.ui.helper.EspressoIdlingResource
 import com.rachmad.app.league.webservice.LeagueSite
 import retrofit2.Call
 import retrofit2.Callback
@@ -156,6 +157,7 @@ class MatchRepository {
         val service = LeagueSite.connect()
         val call = service.searchAllMatch(search)
 
+        EspressoIdlingResource.increment()
         connectionMatchSearch.postValue(Connection.ACCEPTED.Status)
         call!!.enqueue(object : Callback<BaseMatchSearch> {
             override fun onFailure(call: Call<BaseMatchSearch>, t: Throwable) {
@@ -172,6 +174,7 @@ class MatchRepository {
                                 if(data.size > 0) {
                                     matchSearch = it
                                     connectionMatchSearch.postValue(Connection.OK.Status)
+                                    EspressoIdlingResource.decrement()
                                 }
                                 else{
                                     sendErrorMatchSearch("Data is empty")
@@ -195,5 +198,6 @@ class MatchRepository {
     private fun sendErrorMatchSearch(message: String?) {
         errorMatchSearch = ErrorData(Connection.ERROR.Status, message)
         connectionMatchSearch.postValue(Connection.ERROR.Status)
+        EspressoIdlingResource.decrement()
     }
 }

@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -19,8 +18,7 @@ import com.rachmad.app.league.ui.league.details.LeagueDetailsActivity
 import com.rachmad.app.league.ui.match.favorite.FavoriteMatchActivity
 import com.rachmad.app.league.viewmodel.MatchViewModel
 import kotlinx.android.synthetic.main.fragment_match_item_list.*
-import kotlinx.android.synthetic.main.fragment_match_item_list.view.*
-import kotlinx.android.synthetic.main.fragment_match_item_list.view.list
+import kotlinx.android.synthetic.main.fragment_match_item_list.view.search_list
 
 const val ARG_FAVORITE = "favoritematch"
 const val ARG_POSITION = "position"
@@ -62,7 +60,7 @@ class MatchItemFragment : Fragment() {
         else if(activity is FavoriteMatchActivity)
             viewModel = (activity as FavoriteMatchActivity).matchViewModel
 
-        view.list.apply {
+        view.search_list.apply {
             layoutManager = manager
             adapter = adapterList
         }
@@ -75,13 +73,13 @@ class MatchItemFragment : Fragment() {
         if(isFavorite){
             viewModel.matchLiveList.observe(this, Observer {
                 if(it.size > 0) {
-                    list.visibility = RecyclerView.VISIBLE
+                    search_list.visibility = RecyclerView.VISIBLE
                     loading_layout.visibility = ViewGroup.GONE
 
                     adapterList.submitList(it)
                 }
                 else{
-                    list.visibility = RecyclerView.GONE
+                    search_list.visibility = RecyclerView.GONE
                     loading_layout.visibility = ViewGroup.VISIBLE
                     loading.visibility = ProgressBar.GONE
                     error_text.visibility = TextView.VISIBLE
@@ -118,20 +116,20 @@ class MatchItemFragment : Fragment() {
         data?.let {
             when(it){
                 Connection.OK.Status -> {
-                    list.visibility = RecyclerView.VISIBLE
+                    search_list.visibility = RecyclerView.VISIBLE
                     loading_layout.visibility = ViewGroup.GONE
 
                     return true
                 }
                 Connection.ACCEPTED.Status -> {
-                    list.visibility = RecyclerView.GONE
+                    search_list.visibility = RecyclerView.GONE
                     loading_layout.visibility = ViewGroup.VISIBLE
                     loading.visibility = ProgressBar.VISIBLE
                     error_text.visibility = TextView.GONE
                     return false
                 }
                 Connection.ERROR.Status -> {
-                    list.visibility = RecyclerView.GONE
+                    search_list.visibility = RecyclerView.GONE
                     loading_layout.visibility = ViewGroup.VISIBLE
                     loading.visibility = ProgressBar.GONE
                     error_text.visibility = TextView.VISIBLE
@@ -144,7 +142,7 @@ class MatchItemFragment : Fragment() {
                     return false
                 }
                 else -> {
-                    list.visibility = RecyclerView.GONE
+                    search_list.visibility = RecyclerView.GONE
                     loading_layout.visibility = ViewGroup.VISIBLE
                     loading.visibility = ProgressBar.GONE
                     error_text.visibility = TextView.VISIBLE

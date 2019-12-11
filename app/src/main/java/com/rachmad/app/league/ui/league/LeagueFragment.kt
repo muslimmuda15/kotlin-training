@@ -17,7 +17,7 @@ import com.rachmad.app.league.`object`.LeagueList
 import com.rachmad.app.league.data.Connection
 import com.rachmad.app.league.viewmodel.LeagueViewModel
 import kotlinx.android.synthetic.main.fragment_league_list.*
-import kotlinx.android.synthetic.main.fragment_league_list.view.list
+import kotlinx.android.synthetic.main.fragment_league_list.view.*
 
 class LeagueFragment : Fragment() {
     private var listenerLeague: OnLeagueListFragmentListener? = null
@@ -32,7 +32,7 @@ class LeagueFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_league_list, container, false)
 
         viewModel = (activity as MainActivity).viewModel
-        view.list.apply {
+        view.search_list.apply {
             val manager = GridLayoutManager(context, 2)
             adapterList = MyLeagueRecyclerViewAdapter(listenerLeague)
 
@@ -59,20 +59,20 @@ class LeagueFragment : Fragment() {
         data?.let {
             when(it){
                 Connection.OK.Status -> {
-                    list.visibility = RecyclerView.VISIBLE
+                    search_list.visibility = RecyclerView.VISIBLE
                     loadingLayout!!.visibility = ViewGroup.GONE
 
                     return true
                 }
                 Connection.ACCEPTED.Status -> {
-                    list.visibility = RecyclerView.GONE
+                    search_list.visibility = RecyclerView.GONE
                     loadingLayout.visibility = ViewGroup.VISIBLE
                     loading.visibility = ProgressBar.VISIBLE
                     error.visibility = TextView.GONE
                     return false
                 }
                 Connection.ERROR.Status -> {
-                    list.visibility = RecyclerView.GONE
+                    search_list.visibility = RecyclerView.GONE
                     loadingLayout.visibility = ViewGroup.VISIBLE
                     loading.visibility = ProgressBar.GONE
                     error.visibility = TextView.VISIBLE
@@ -81,7 +81,7 @@ class LeagueFragment : Fragment() {
                     return false
                 }
                 else -> {
-                    list.visibility = RecyclerView.GONE
+                    search_list.visibility = RecyclerView.GONE
                     loadingLayout.visibility = ViewGroup.VISIBLE
                     loading.visibility = ProgressBar.GONE
                     error.visibility = TextView.VISIBLE
