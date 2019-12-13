@@ -139,6 +139,17 @@ data class BaseTeamData(
 data class TeamData(
     val idTeam: String?,
     val strTeam: String?,
-    val strTeamBadge: String?
+    val strTeamBadge: String?,
+    val strTeamJersey: String?,
+    val strAlternate: String?,
+    val strDescriptionEN: String?,
+    val intFormedYear: String?,
+    val strStadium: String?,
+    val strStadiumThumb: String?,
+    val strStadiumDescription: String,
+    val strStadiumLocation: String?,
+    val intStadiumCapacity: String?,
+    val strWebsite: String?,
+    val strTeamBanner: String?
 )
 

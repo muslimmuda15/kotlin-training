@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.match.favorite.FavoriteMatchActivity"></activity>
+        <activity android:name=".ui.team.TeamActivity"></activity>
+        <activity android:name=".ui.match.favorite.FavoriteMatchActivity" />
         <activity android:name=".ui.search.SearchMatchActivity" />
         <activity android:name=".ui.match.details.MatchDetailsActivity" />
         <activity android:name=".ui.league.details.LeagueDetailsActivity" />

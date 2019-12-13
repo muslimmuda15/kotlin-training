@@ -171,7 +171,7 @@ class MatchItemFragment : Fragment() {
     }
 
     interface OnTabFragmentListener {
-        fun onListFragmentInteraction(item: MatchList, homeImage: String?, awayImage: String?)
+        fun onListFragmentInteraction(item: MatchList, idHome: String?, homeImage: String?, idAway: String?, awayImage: String?)
     }
 
     companion object {

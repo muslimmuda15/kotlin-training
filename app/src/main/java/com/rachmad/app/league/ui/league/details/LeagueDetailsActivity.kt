@@ -21,12 +21,11 @@ import com.rachmad.app.league.`object`.MatchList
 import com.rachmad.app.league.data.Connection
 import com.rachmad.app.league.helper.Utils
 import com.rachmad.app.league.ui.match.MatchItemFragment
-import com.rachmad.app.league.ui.match.details.AWAY_PATH
-import com.rachmad.app.league.ui.match.details.HOME_PATH
-import com.rachmad.app.league.ui.match.details.MATCH_ID
-import com.rachmad.app.league.ui.match.details.MatchDetailsActivity
+import com.rachmad.app.league.ui.match.details.*
 import com.rachmad.app.league.ui.match.favorite.FavoriteMatchActivity
 import com.rachmad.app.league.ui.search.SearchMatchActivity
+import com.rachmad.app.league.ui.team.TEAM_LEAGUE_NAME
+import com.rachmad.app.league.ui.team.TeamActivity
 import com.rachmad.app.league.viewmodel.MatchViewModel
 import kotlinx.android.synthetic.main.activity_league_details.*
 import org.jetbrains.anko.intentFor
@@ -34,6 +33,23 @@ import org.jetbrains.anko.singleTop
 
 const val LEAGUE_ID = "id"
 class LeagueDetailsActivity : LeagueActivity(), MatchItemFragment.OnTabFragmentListener {
+    var title = ""
+
+    override fun onListFragmentInteraction(
+        item: MatchList,
+        idHome: String?,
+        homeImage: String?,
+        idAway: String?,
+        awayImage: String?
+    ) {
+        startActivity(intentFor<MatchDetailsActivity>(
+            MATCH_ID to item.idEvent?.toInt(),
+            HOME_ID to idHome?.toInt(),
+            HOME_PATH to homeImage,
+            AWAY_ID to idAway?.toInt(),
+            AWAY_PATH to awayImage).singleTop())
+    }
+
     var idLeague: Int = 0
 
     val matchViewModel: MatchViewModel by lazy { ViewModelProviders.of(this).get(
@@ -42,12 +58,6 @@ class LeagueDetailsActivity : LeagueActivity(), MatchItemFragment.OnTabFragmentL
 
     lateinit var tabPagerAdapter: TabPagerAdapter
 
-    override fun onListFragmentInteraction(item: MatchList, homeImage: String?, awayImage: String?) {
-        startActivity(intentFor<MatchDetailsActivity>(
-            MATCH_ID to item.idEvent?.toInt(),
-            HOME_PATH to homeImage,
-            AWAY_PATH to awayImage).singleTop())
-    }
 
     private fun initialize(){
         match_tab.addTab(match_tab.newTab().setText(getString(R.string.last_match)))
@@ -73,8 +83,9 @@ class LeagueDetailsActivity : LeagueActivity(), MatchItemFragment.OnTabFragmentL
             if(checkConnection(it)){
                 viewModel.leagueDetails()?.let { data ->
                     with(data) {
+                        title = strLeague ?: strLeagueAlternate ?: ""
                         supportActionBar?.title = HtmlCompat.fromHtml(
-                            "<font color='#ffffff'>${strLeague ?: strLeagueAlternate}</font>",
+                            "<font color='#ffffff'>${title}</font>",
                             HtmlCompat.FROM_HTML_MODE_LEGACY
                         )
                         val backdrop = strFanart1
@@ -174,6 +185,9 @@ class LeagueDetailsActivity : LeagueActivity(), MatchItemFragment.OnTabFragmentL
             }
             R.id.favorite -> {
                 startActivity(intentFor<FavoriteMatchActivity>().singleTop())
+            }
+            R.id.team -> {
+                startActivity(intentFor<TeamActivity>(TEAM_LEAGUE_NAME to title).singleTop())
             }
         }
         return super.onOptionsItemSelected(item)

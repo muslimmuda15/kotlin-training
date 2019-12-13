@@ -14,6 +14,7 @@ import com.rachmad.app.league.R
 import com.rachmad.app.league.`object`.MatchDetails
 import com.rachmad.app.league.data.Connection
 import com.rachmad.app.league.repository.LeagueRepository
+import com.rachmad.app.league.repository.TeamRepository
 
 import com.rachmad.app.league.ui.search.SearchItemFragment.OnSearchMatchListener
 
@@ -40,29 +41,29 @@ class MySearchItemRecyclerViewAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = with(holder){
         val item = list[position]
 
-        val leagueRepository = LeagueRepository()
-        val connection = leagueRepository.connectionTeamData
-        leagueRepository.team(item.idHomeTeam?.toInt() ?: 0)
+        val teamRepository = TeamRepository()
+        val connection = teamRepository.connectionTeamData
+        teamRepository.team(item.idHomeTeam?.toInt() ?: 0)
         connection.observe(fr, Observer<Int> {
             Log.d("Image", "IMAGE : " + it)
             if(it == Connection.OK.Status){
-                Log.d("Image", "IMAGE : " + leagueRepository.teamData?.strTeamBadge)
+                Log.d("Image", "IMAGE : " + teamRepository.teamData?.strTeamBadge)
                 GlideApp.with(homeImage)
-                    .load(leagueRepository.teamData?.strTeamBadge)
+                    .load(teamRepository.teamData?.strTeamBadge)
                     .fitCenter()
                     .into(homeImage)
             }
         })
 
-        val leagueRepository2 = LeagueRepository()
-        val connection2 = leagueRepository2.connectionTeamData
-        leagueRepository2.team(item.idAwayTeam?.toInt() ?: 0)
+        val teamRepository2 = TeamRepository()
+        val connection2 = teamRepository2.connectionTeamData
+        teamRepository2.team(item.idAwayTeam?.toInt() ?: 0)
         connection2.observe(fr, Observer<Int> {
             Log.d("Image", "IMAGE : " + it)
             if(it == Connection.OK.Status){
-                Log.d("Image", "IMAGE : " + leagueRepository2.teamData?.strTeam)
+                Log.d("Image", "IMAGE : " + teamRepository2.teamData?.strTeam)
                 GlideApp.with(awayImage)
-                    .load(leagueRepository2.teamData?.strTeamBadge)
+                    .load(teamRepository2.teamData?.strTeamBadge)
                     .fitCenter()
                     .into(awayImage)
             }
@@ -73,7 +74,7 @@ class MySearchItemRecyclerViewAdapter(
         score.text = "${item.intHomeScore ?: 0} - ${item.intAwayScore ?: 0}"
 
         holder.mView.setOnClickListener{
-            mListener?.onListFragmentInteraction(item, leagueRepository.teamData?.strTeamBadge, leagueRepository2.teamData?.strTeamBadge)
+            mListener?.onListFragmentInteraction(item, teamRepository.teamData?.strTeamBadge, teamRepository2.teamData?.strTeamBadge)
         }
     }
 

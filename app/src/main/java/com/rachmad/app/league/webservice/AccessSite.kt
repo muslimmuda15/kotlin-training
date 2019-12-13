@@ -39,4 +39,9 @@ interface AccessSite {
     fun searchAllMatch(
         @Query("e") search: String
     ): Call<BaseMatchSearch>
+
+    @GET("/api/v1/json/1/search_all_teams.php")
+    fun teamByLeague(
+        @Query("l") leagueName: String
+    ): Call<BaseTeamData>
 }

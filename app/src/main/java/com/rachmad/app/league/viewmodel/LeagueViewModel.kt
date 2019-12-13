@@ -19,9 +19,4 @@ class LeagueViewModel: ViewModel() {
     fun errorLeagueDetails(): ErrorData? = leagueRepository.errorLeagueDetails
     fun leagueDetails(): LeagueList? = leagueRepository.leagueDetails
     fun connectLeagueDetails(id: Int) = leagueRepository.leagueDetails(id)
-
-    fun connectionTeamDataDetails(): LiveData<Int> = leagueRepository.connectionTeamData
-    fun errorTeamDataDetails(): ErrorData? = leagueRepository.errorTeamData
-//    fun teamDataDetails(): List<TeamData>? = leagueRepository.teamData
-    fun team(id: Int) = leagueRepository.team(id)
 }

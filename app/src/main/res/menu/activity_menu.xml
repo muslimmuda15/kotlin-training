@@ -5,11 +5,18 @@
     tools:context="com.app.rachmad.movie.ui.MainActivity">
 
     <item
+        android:id="@+id/team"
+        android:title="@string/team"
+        android:icon="@drawable/ic_team_black_24dp"
+        app:iconTint="@color/white"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/search"
         android:title="@string/search"
         android:icon="@drawable/ic_search_black_24dp"
         android:orderInCategory="100"
-        android:iconTint="@color/white"
+        app:iconTint="@color/white"
         app:showAsAction="always" />
 
     <item

@@ -23,7 +23,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/unfavorite_title"
+                tools:text="@string/unfavorite_title"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="@dimen/default_margin"/>
@@ -31,7 +31,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/unfavorite_description"/>
+                tools:text="@string/unfavorite_description"/>
         </LinearLayout>
 
         <LinearLayout
@@ -46,7 +46,7 @@
                 android:id="@+id/no"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/no"
+                tools:text="@string/no"
                 android:background="@color/white"
                 android:textColor="@color/gray"
                 style="?android:attr/borderlessButtonStyle"/>
@@ -55,7 +55,7 @@
                 android:id="@+id/yes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/yes"
+                tools:text="@string/yes"
                 android:minWidth="0dp"
                 android:background="@color/white"
                 android:textColor="@color/gray"

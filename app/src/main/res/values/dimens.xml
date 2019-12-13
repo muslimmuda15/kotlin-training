@@ -7,4 +7,5 @@
     <dimen name="half_margin">4dp</dimen>
     <dimen name="quarter_margin">2dp</dimen>
     <dimen name="no_margin">0dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 </resources>

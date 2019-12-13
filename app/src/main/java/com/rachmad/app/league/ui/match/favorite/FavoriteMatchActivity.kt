@@ -8,24 +8,29 @@ import androidx.lifecycle.ViewModelProviders
 import com.rachmad.app.league.R
 import com.rachmad.app.league.`object`.MatchList
 import com.rachmad.app.league.ui.match.MatchItemFragment
-import com.rachmad.app.league.ui.match.details.AWAY_PATH
-import com.rachmad.app.league.ui.match.details.HOME_PATH
-import com.rachmad.app.league.ui.match.details.MATCH_ID
-import com.rachmad.app.league.ui.match.details.MatchDetailsActivity
+import com.rachmad.app.league.ui.match.details.*
 import com.rachmad.app.league.viewmodel.MatchViewModel
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 
 class FavoriteMatchActivity : AppCompatActivity(), MatchItemFragment.OnTabFragmentListener {
-    val matchViewModel: MatchViewModel by lazy { ViewModelProviders.of(this).get(
-        MatchViewModel::class.java)
-    }
-
-    override fun onListFragmentInteraction(item: MatchList, homeImage: String?, awayImage: String?) {
+    override fun onListFragmentInteraction(
+        item: MatchList,
+        idHome: String?,
+        homeImage: String?,
+        idAway: String?,
+        awayImage: String?
+    ) {
         startActivity(intentFor<MatchDetailsActivity>(
             MATCH_ID to item.idEvent?.toInt(),
+            HOME_ID to item.idHomeTeam?.toInt(),
             HOME_PATH to homeImage,
+            AWAY_ID to item.idAwayTeam?.toInt(),
             AWAY_PATH to awayImage).singleTop())
+    }
+
+    val matchViewModel: MatchViewModel by lazy { ViewModelProviders.of(this).get(
+        MatchViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

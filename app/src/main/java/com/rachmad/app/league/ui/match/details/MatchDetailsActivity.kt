@@ -2,9 +2,9 @@ package com.rachmad.app.league.ui.match.details
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.Contacts
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -37,12 +37,16 @@ import kotlin.collections.HashMap
 
 const val MATCH_ID = "MatchId"
 const val HOME_PATH = "HomePath"
+const val HOME_ID = "HomeId"
 const val AWAY_PATH = "AwayPath"
+const val AWAY_ID = "AwayId"
 class MatchDetailsActivity : AppCompatActivity() {
     var idMatch = 0
+    var idHome = 0
+    var idAway = 0
     var isFavorite = false
-    val viewModel: MatchViewModel by lazy { ViewModelProviders.of(this).get(
-        MatchViewModel::class.java)
+    val viewModel: MatchViewModel by lazy {
+        ViewModelProviders.of(this).get(MatchViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +59,9 @@ class MatchDetailsActivity : AppCompatActivity() {
         supportActionBar?.title = getString(R.string.match_details)
 
         idMatch = intent.getIntExtra(MATCH_ID, 0)
+        idHome = intent.getIntExtra(HOME_ID, 0)
         val homeImage = intent.getStringExtra(HOME_PATH)
+        idAway = intent.getIntExtra(AWAY_ID, 0)
         val awayImage = intent.getStringExtra(AWAY_PATH)
 
         GlideApp.with(home_image)
@@ -75,6 +81,14 @@ class MatchDetailsActivity : AppCompatActivity() {
                 loadData()
             }
         })
+    }
+
+    fun getHome(v: View){
+        
+    }
+
+    fun getAway(v: View){
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
