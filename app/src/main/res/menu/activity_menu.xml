@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.app.rachmad.movie.ui.MainActivity">
 
-    <item
-        android:id="@+id/team"
-        android:title="@string/team"
-        android:icon="@drawable/ic_team_black_24dp"
-        app:iconTint="@color/white"
-        app:showAsAction="always" />
+<!--    <item-->
+<!--        android:id="@+id/team"-->
+<!--        android:title="@string/team"-->
+<!--        android:icon="@drawable/ic_team_black_24dp"-->
+<!--        app:iconTint="@color/white"-->
+<!--        app:showAsAction="always" />-->
 
     <item
         android:id="@+id/search"

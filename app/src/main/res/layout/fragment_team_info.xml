@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/double_margin"
+        tools:context=".ui.team.details.TeamInfoFragment">
+
+        <TextView
+            android:id="@+id/team_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:textColor="@color/dark_gray"
+            android:textSize="24sp"
+            tools:text="Arsenal" />
+
+        <TextView
+            android:id="@+id/team_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/team_name"
+            android:layout_marginTop="@dimen/default_margin"
+            tools:text="Arsenal Football Club is a professional football club based in Holloway, London which currently plays in the Premier League, the highest level of English football. One of the most successful clubs in English football, they have won 13 First Division and Premier League titles and a joint record 11 FA Cups.\r\n\r\nArsenal's success has been particularly consistent: the club has accumulated the second most points in English top-flight football, hold the ongoing record for the longest uninterrupted period in the top flight, and would be placed first in an aggregated league of the entire 20th century. Arsenal is the second side to complete an English top-flight season unbeaten (in the 2003–04 season), playing almost twice as many matches as the previous invincibles Preston North End in the 1888–89 season." />
+
+        <TextView
+            android:id="@+id/flag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/team_description"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="@dimen/default_margin"
+            android:background="@drawable/ic_flag"
+            android:backgroundTint="@color/dark_gray"/>
+
+        <TextView
+            android:id="@+id/country"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/flag"
+            android:layout_alignBottom="@+id/flag"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="3dp"
+            android:layout_toEndOf="@+id/flag"
+            tools:text="England" />
+
+        <TextView
+            android:id="@+id/stadium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/flag"
+            android:layout_marginTop="@dimen/default_margin"
+            android:background="@drawable/ic_stadium_variant"
+            android:backgroundTint="@color/dark_gray"/>
+
+        <TextView
+            android:id="@+id/stadium_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/stadium"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="2dp"
+            android:layout_toEndOf="@+id/stadium"
+            tools:text="Emirates Stadium" />
+
+        <TextView
+            android:id="@+id/stadium_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/stadium_name"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_toEndOf="@+id/stadium_name"
+            tools:text="Holloway, London" />
+
+        <TextView
+            android:id="@+id/stadium_capacity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/stadium_name"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginTop="@dimen/half_margin"
+            android:layout_toEndOf="@+id/stadium"
+            tools:text="60338 peoples" />
+
+        <TextView
+            android:id="@+id/stadium_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/stadium_capacity"
+            android:layout_alignStart="@+id/stadium_capacity"
+            android:layout_marginTop="@dimen/default_margin"
+            tools:text="Arsenal Football Club is a professional football club based in Holloway, London which currently plays in the Premier League, the highest level of English football. One of the most successful clubs in English football, they have won 13 First Division and Premier League titles and a joint record 11 FA Cups." />
+    </RelativeLayout>
+</androidx.core.widget.NestedScrollView>

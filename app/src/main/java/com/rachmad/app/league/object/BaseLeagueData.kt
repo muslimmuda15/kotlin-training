@@ -150,6 +150,29 @@ data class TeamData(
     val strStadiumLocation: String?,
     val intStadiumCapacity: String?,
     val strWebsite: String?,
-    val strTeamBanner: String?
+    val strCountry: String?,
+    val strTeamBanner: String?,
+    val strTeamFanart1: String?,
+    val strTeamFanart2: String?,
+    val strTeamFanart3: String?,
+    val strTeamFanart4: String?
+): Serializable
+
+data class BasePlayerData(
+    val player: List<PlayerData>?
 )
 
+data class PlayerData(
+    val idPlayer: String?,
+    val strPlayer: String?,
+    val strNationality: String?,
+    val strNumber: String?,
+    val strBirthLocation: String?,
+    val dateBorn: String?,
+    val strWage: String?,
+    val strPosition: String?,
+    val strDescriptionEN: String?,
+    val strWeight: String?,
+    val strHeight: String?,
+    val strCutout: String?
+): Serializable

@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer
 import com.rachmad.app.league.R
 import com.rachmad.app.league.`object`.TeamData
 import com.rachmad.app.league.data.Connection
+import com.rachmad.app.league.ui.league.details.LeagueDetailsActivity
 import com.rachmad.app.league.viewmodel.TeamViewModel
 import kotlinx.android.synthetic.main.fragment_team_item_list.*
 import kotlinx.android.synthetic.main.fragment_team_item_list.error
@@ -35,8 +36,8 @@ class TeamItemFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_team_item_list, container, false)
 
-        if(activity is TeamActivity){
-            viewModel = (activity as TeamActivity).viewModel
+        if(activity is LeagueDetailsActivity){
+            viewModel = (activity as LeagueDetailsActivity).teamViewModel
         }
 
         with(view.team_list) {

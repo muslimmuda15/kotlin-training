@@ -44,4 +44,9 @@ interface AccessSite {
     fun teamByLeague(
         @Query("l") leagueName: String
     ): Call<BaseTeamData>
+
+    @GET("/api/v1/json/1/searchplayers.php")
+    fun playerList(
+        @Query("t") teamName: String
+    ): Call<BasePlayerData>
 }

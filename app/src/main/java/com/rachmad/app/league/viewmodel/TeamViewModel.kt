@@ -11,6 +11,7 @@ class TeamViewModel: ViewModel() {
 
     fun connectionTeamDataDetails(): LiveData<Int> = teamRepository.connectionTeamData
     fun errorTeamDataDetails(): ErrorData? = teamRepository.errorTeamData
+    fun teamDetails(): TeamData? = teamRepository.teamData
     fun team(id: Int) = teamRepository.team(id)
 
     fun connectionTeamByLeague(): LiveData<Int> = teamRepository.connectionTeamByLeague

@@ -18,6 +18,7 @@ import com.rachmad.app.league.GlideApp
 import com.rachmad.app.league.LeagueActivity
 import com.rachmad.app.league.R
 import com.rachmad.app.league.`object`.MatchList
+import com.rachmad.app.league.`object`.TeamData
 import com.rachmad.app.league.data.Connection
 import com.rachmad.app.league.helper.Utils
 import com.rachmad.app.league.ui.match.MatchItemFragment
@@ -26,13 +27,19 @@ import com.rachmad.app.league.ui.match.favorite.FavoriteMatchActivity
 import com.rachmad.app.league.ui.search.SearchMatchActivity
 import com.rachmad.app.league.ui.team.TEAM_LEAGUE_NAME
 import com.rachmad.app.league.ui.team.TeamActivity
+import com.rachmad.app.league.ui.team.TeamItemFragment
+import com.rachmad.app.league.ui.team.details.TEAM_ALTERNATE
+import com.rachmad.app.league.ui.team.details.TEAM_ID
+import com.rachmad.app.league.ui.team.details.TEAM_NAME
+import com.rachmad.app.league.ui.team.details.TeamDetailsActivity
 import com.rachmad.app.league.viewmodel.MatchViewModel
+import com.rachmad.app.league.viewmodel.TeamViewModel
 import kotlinx.android.synthetic.main.activity_league_details.*
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 
 const val LEAGUE_ID = "id"
-class LeagueDetailsActivity : LeagueActivity(), MatchItemFragment.OnTabFragmentListener {
+class LeagueDetailsActivity : LeagueActivity(), MatchItemFragment.OnTabFragmentListener, TeamItemFragment.OnTeamFragmentListener {
     var title = ""
 
     override fun onListFragmentInteraction(
@@ -50,18 +57,29 @@ class LeagueDetailsActivity : LeagueActivity(), MatchItemFragment.OnTabFragmentL
             AWAY_PATH to awayImage).singleTop())
     }
 
+    override fun onTeamFragmentListener(item: TeamData) {
+        startActivity(intentFor<TeamDetailsActivity>(
+            TEAM_ID to item.idTeam,
+            TEAM_NAME to item.strTeam,
+            TEAM_ALTERNATE to item.strAlternate
+        ).singleTop())
+    }
+
     var idLeague: Int = 0
 
-    val matchViewModel: MatchViewModel by lazy { ViewModelProviders.of(this).get(
-        MatchViewModel::class.java)
-    }
+    lateinit var matchViewModel: MatchViewModel
+    lateinit var teamViewModel: TeamViewModel
 
     lateinit var tabPagerAdapter: TabPagerAdapter
 
 
     private fun initialize(){
+        matchViewModel = ViewModelProviders.of(this).get(MatchViewModel::class.java)
+        teamViewModel = ViewModelProviders.of(this).get(TeamViewModel::class.java)
+
         match_tab.addTab(match_tab.newTab().setText(getString(R.string.last_match)))
         match_tab.addTab(match_tab.newTab().setText(getString(R.string.next_match)))
+        match_tab.addTab(match_tab.newTab().setText(getString(R.string.team)))
 
         supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -121,10 +139,10 @@ class LeagueDetailsActivity : LeagueActivity(), MatchItemFragment.OnTabFragmentL
     }
 
     private fun tabMatch(){
-        tabPagerAdapter = TabPagerAdapter(supportFragmentManager, 2)
+        tabPagerAdapter = TabPagerAdapter(supportFragmentManager, 3)
 
         view_pager.adapter = tabPagerAdapter
-        view_pager.offscreenPageLimit = 2
+        view_pager.offscreenPageLimit = 3
         view_pager.adapter?.notifyDataSetChanged()
 
         view_pager.addOnPageChangeListener(object: TabLayout.TabLayoutOnPageChangeListener(match_tab) {
@@ -186,9 +204,9 @@ class LeagueDetailsActivity : LeagueActivity(), MatchItemFragment.OnTabFragmentL
             R.id.favorite -> {
                 startActivity(intentFor<FavoriteMatchActivity>().singleTop())
             }
-            R.id.team -> {
-                startActivity(intentFor<TeamActivity>(TEAM_LEAGUE_NAME to title).singleTop())
-            }
+//            R.id.team -> {
+//                startActivity(intentFor<TeamActivity>(TEAM_LEAGUE_NAME to title).singleTop())
+//            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -196,7 +214,14 @@ class LeagueDetailsActivity : LeagueActivity(), MatchItemFragment.OnTabFragmentL
     inner class TabPagerAdapter(fm: FragmentManager, val countTabs: Int): FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT){
         override fun getItem(position: Int): Fragment {
             Log.d("main", "POSITION : " + position)
-            return MatchItemFragment.newInstance(false, position, idLeague)
+            if(position == 0 || position == 1)
+                return MatchItemFragment.newInstance(false, position, idLeague)
+            else if (position == 2){
+                return TeamItemFragment.newInstance(title)
+            }
+            else{
+                return Fragment()
+            }
         }
 
         override fun getCount(): Int = countTabs

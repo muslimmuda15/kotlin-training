@@ -16,4 +16,9 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="team">team</string>
+    <string name="team_info">Team Info</string>
+    <string name="player">Player</string>
+    <string name="peoples">peoples</string>
+    <string name="weight">weight</string>
+    <string name="height">height</string>
 </resources>
