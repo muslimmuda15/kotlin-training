@@ -4,6 +4,7 @@
     <string name="description">Description</string>
     <string name="last_match">Last Match</string>
     <string name="next_match">Next Match</string>
+    <string name="classement">Classement</string>
     <string name="search_hint">Search all about soccer</string>
     <string name="match_details">Match Details</string>
     <string name="home">Home</string>
@@ -21,4 +22,10 @@
     <string name="peoples">peoples</string>
     <string name="weight">weight</string>
     <string name="height">height</string>
+    <string name="played">played</string>
+    <string name="win">win</string>
+    <string name="goals">goals</string>
+    <string name="draw">draw</string>
+    <string name="loss">loss</string>
+    <string name="total">total</string>
 </resources>

@@ -17,10 +17,12 @@ import com.google.android.material.tabs.TabLayout
 import com.rachmad.app.league.GlideApp
 import com.rachmad.app.league.LeagueActivity
 import com.rachmad.app.league.R
+import com.rachmad.app.league.`object`.ClassementData
 import com.rachmad.app.league.`object`.MatchList
 import com.rachmad.app.league.`object`.TeamData
 import com.rachmad.app.league.data.Connection
 import com.rachmad.app.league.helper.Utils
+import com.rachmad.app.league.ui.classement.ClassementItemFragment
 import com.rachmad.app.league.ui.match.MatchItemFragment
 import com.rachmad.app.league.ui.match.details.*
 import com.rachmad.app.league.ui.match.favorite.FavoriteMatchActivity
@@ -32,6 +34,7 @@ import com.rachmad.app.league.ui.team.details.TEAM_ALTERNATE
 import com.rachmad.app.league.ui.team.details.TEAM_ID
 import com.rachmad.app.league.ui.team.details.TEAM_NAME
 import com.rachmad.app.league.ui.team.details.TeamDetailsActivity
+import com.rachmad.app.league.viewmodel.ClassementViewModel
 import com.rachmad.app.league.viewmodel.MatchViewModel
 import com.rachmad.app.league.viewmodel.TeamViewModel
 import kotlinx.android.synthetic.main.activity_league_details.*
@@ -39,7 +42,12 @@ import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.singleTop
 
 const val LEAGUE_ID = "id"
-class LeagueDetailsActivity : LeagueActivity(), MatchItemFragment.OnTabFragmentListener, TeamItemFragment.OnTeamFragmentListener {
+class LeagueDetailsActivity : LeagueActivity(), MatchItemFragment.OnTabFragmentListener, TeamItemFragment.OnTeamFragmentListener, ClassementItemFragment.OnClassementListener {
+
+    override fun onListFragmentInteraction(item: ClassementData?) {
+
+    }
+
     var title = ""
 
     override fun onListFragmentInteraction(
@@ -69,16 +77,18 @@ class LeagueDetailsActivity : LeagueActivity(), MatchItemFragment.OnTabFragmentL
 
     lateinit var matchViewModel: MatchViewModel
     lateinit var teamViewModel: TeamViewModel
+    lateinit var classementViewModel: ClassementViewModel
 
     lateinit var tabPagerAdapter: TabPagerAdapter
-
 
     private fun initialize(){
         matchViewModel = ViewModelProviders.of(this).get(MatchViewModel::class.java)
         teamViewModel = ViewModelProviders.of(this).get(TeamViewModel::class.java)
+        classementViewModel = ViewModelProviders.of(this).get(ClassementViewModel::class.java)
 
         match_tab.addTab(match_tab.newTab().setText(getString(R.string.last_match)))
         match_tab.addTab(match_tab.newTab().setText(getString(R.string.next_match)))
+        match_tab.addTab(match_tab.newTab().setText(getString(R.string.classement)))
         match_tab.addTab(match_tab.newTab().setText(getString(R.string.team)))
 
         supportActionBar?.setDisplayShowHomeEnabled(true)
@@ -139,10 +149,10 @@ class LeagueDetailsActivity : LeagueActivity(), MatchItemFragment.OnTabFragmentL
     }
 
     private fun tabMatch(){
-        tabPagerAdapter = TabPagerAdapter(supportFragmentManager, 3)
+        tabPagerAdapter = TabPagerAdapter(supportFragmentManager, 4)
 
         view_pager.adapter = tabPagerAdapter
-        view_pager.offscreenPageLimit = 3
+        view_pager.offscreenPageLimit = 4
         view_pager.adapter?.notifyDataSetChanged()
 
         view_pager.addOnPageChangeListener(object: TabLayout.TabLayoutOnPageChangeListener(match_tab) {
@@ -217,6 +227,9 @@ class LeagueDetailsActivity : LeagueActivity(), MatchItemFragment.OnTabFragmentL
             if(position == 0 || position == 1)
                 return MatchItemFragment.newInstance(false, position, idLeague)
             else if (position == 2){
+                return ClassementItemFragment.newInstance(idLeague)
+            }
+            else if (position == 3){
                 return TeamItemFragment.newInstance(title)
             }
             else{

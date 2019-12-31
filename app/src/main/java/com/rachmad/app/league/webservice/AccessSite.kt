@@ -49,4 +49,9 @@ interface AccessSite {
     fun playerList(
         @Query("t") teamName: String
     ): Call<BasePlayerData>
+
+    @GET("/api/v1/json/1/lookuptable.php")
+    fun classementList(
+        @Query("l") leagueId: Int
+    ): Call<BaseClassementData>
 }
