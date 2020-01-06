@@ -22,6 +22,10 @@ import com.rachmad.app.league.helper.ui.DatabaseHelper
 import com.rachmad.app.league.helper.ui.DatabaseHelper.TABLE_MATCH
 import com.rachmad.app.league.ui.match.favorite.FavoriteMatchActivity
 import com.rachmad.app.league.ui.search.SearchMatchActivity
+import com.rachmad.app.league.ui.team.details.TEAM_ALTERNATE
+import com.rachmad.app.league.ui.team.details.TEAM_ID
+import com.rachmad.app.league.ui.team.details.TEAM_NAME
+import com.rachmad.app.league.ui.team.details.TeamDetailsActivity
 import com.rachmad.app.league.viewmodel.MatchViewModel
 import kotlinx.android.synthetic.main.activity_match_details.*
 import org.jetbrains.anko.db.MapRowParser
@@ -45,6 +49,10 @@ class MatchDetailsActivity : AppCompatActivity() {
     var idHome = 0
     var idAway = 0
     var isFavorite = false
+
+    var strTeamHome: String? = null
+    var strTeamAway: String? = null
+
     val viewModel: MatchViewModel by lazy {
         ViewModelProviders.of(this).get(MatchViewModel::class.java)
     }
@@ -84,11 +92,19 @@ class MatchDetailsActivity : AppCompatActivity() {
     }
 
     fun getHome(v: View){
-        
+        startActivity(intentFor<TeamDetailsActivity>(
+            TEAM_ID to idHome.toString(),
+            TEAM_NAME to strTeamHome,
+            TEAM_ALTERNATE to null
+        ).singleTop())
     }
 
     fun getAway(v: View){
-
+        startActivity(intentFor<TeamDetailsActivity>(
+            TEAM_ID to idAway.toString(),
+            TEAM_NAME to strTeamAway,
+            TEAM_ALTERNATE to null
+        ).singleTop())
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -126,6 +142,9 @@ class MatchDetailsActivity : AppCompatActivity() {
         score.text = "${data.intHomeScore ?: 0} - ${data.intAwayScore ?: 0}"
         date_match.text = Utils.dateFormat(data.dateEvent ?: Date().toString())
         time_match.text = Utils.timeFormat(data.strTime ?: Date().toString())
+
+        strTeamHome = data.strHomeTeam
+        strTeamAway = data.strAwayTeam
 
         val status = ArrayList<String>()
 
@@ -172,7 +191,7 @@ class MatchDetailsActivity : AppCompatActivity() {
 
         favorite_button.setOnClickListener {
             if(isFavorite) {
-                val unFavorite = UnfavoriteDialog(this, viewModel, data.idEvent!!)
+                val unFavorite = UnfavoriteDialog(this@MatchDetailsActivity, viewModel, null, data.idEvent!!)
                 unFavorite.show()
                 unFavorite.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             }

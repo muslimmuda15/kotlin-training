@@ -53,6 +53,6 @@ class MatchDB(c: Context): ManagedSQLiteOpenHelper(c, BuildConfig.MATCH_DB, null
     }
 
     override fun onUpgrade(db: SQLiteDatabase, p1: Int, p2: Int) {
-        db.dropTable("match", true)
+        db.dropTable(DatabaseHelper.TABLE_MATCH, true)
     }
 }

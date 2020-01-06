@@ -6,13 +6,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/classement_list"
+    <HorizontalScrollView
+        android:id="@+id/classement_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="LinearLayoutManager"
-        tools:context=".ui.classement.ClassementItemFragment"
-        tools:listitem="@layout/fragment_classement_item" />
+        android:layout_height="match_parent">
+
+        <de.codecrafters.tableview.TableView
+            android:id="@+id/classement_list"
+            android:layout_width="600dp"
+            android:layout_height="match_parent"
+            app:tableView_columnCount="7"
+            app:tableView_headerColor="@color/colorPrimary"
+            app:tableView_headerElevation="0"
+            tools:context=".ui.classement.ClassementItemFragment"
+            tools:listitem="@layout/fragment_classement_item" />
+    </HorizontalScrollView>
 
     <LinearLayout
         android:id="@+id/loadingLayout"
@@ -20,6 +28,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:background="@color/white"
+        android:visibility="gone"
         android:orientation="vertical">
 
         <ProgressBar

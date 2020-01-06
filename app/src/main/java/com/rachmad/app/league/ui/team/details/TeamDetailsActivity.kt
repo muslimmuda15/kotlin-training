@@ -7,12 +7,14 @@ import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.app.rachmad.movie.ui.helper.UnfavoriteDialog
 import com.google.android.material.tabs.TabLayout
 import com.rachmad.app.league.GlideApp
 import com.rachmad.app.league.R
@@ -39,6 +41,13 @@ class TeamDetailsActivity : AppCompatActivity(), PlayerItemFragment.OnPlayerFrag
     lateinit var teamViewPager: TeamViewModel
     lateinit var teamInfo: TeamData
     lateinit var teamPagerAdapter: TeamPagerAdapter
+
+    var isFavorite = false
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.updateDatabase()
+    }
 
     override fun onListFragmentInteraction(item: PlayerData?) {
         startActivity(intentFor<PlayerDetailsActivity>(PLAYER_DATA to item).singleTop())
@@ -103,10 +112,40 @@ class TeamDetailsActivity : AppCompatActivity(), PlayerItemFragment.OnPlayerFrag
                         date.text = intFormedYear
 
                         tabTeam()
+
+                        favorite_button.setOnClickListener {
+                            if(isFavorite) {
+                                val unFavorite = UnfavoriteDialog(this@TeamDetailsActivity, null, viewModel, data.idTeam!!)
+                                unFavorite.show()
+                                unFavorite.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                            }
+                            else {
+                                insertData(data)
+                                viewModel.updateTeamDetails(data.idTeam ?: "0")
+                                Toast.makeText(this@TeamDetailsActivity, "You have like " + data.strTeam, Toast.LENGTH_SHORT).show()
+                            }
+                        }
+
+                        viewModel.updateTeamDetails(data.idTeam ?: "0")
+
+                        viewModel.teamDetailsStorage.observe(this@TeamDetailsActivity, Observer<Boolean> {
+                            isFavorite = it
+                            favorite_button.setImageResource(
+                                if(it)
+                                    R.drawable.ic_favorite_black_24dp
+                                else
+                                    R.drawable.ic_favorite_border_black_24dp
+                            )
+                        })
                     }
                 }
             }
         })
+    }
+
+    private fun insertData(data: TeamData){
+        viewModel.insertTeam(data)
+        favorite_button.setImageResource(R.drawable.ic_favorite_black_24dp)
     }
 
     private fun tabTeam(){

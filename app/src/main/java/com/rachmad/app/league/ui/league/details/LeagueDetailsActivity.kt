@@ -230,7 +230,7 @@ class LeagueDetailsActivity : LeagueActivity(), MatchItemFragment.OnTabFragmentL
                 return ClassementItemFragment.newInstance(idLeague)
             }
             else if (position == 3){
-                return TeamItemFragment.newInstance(title)
+                return TeamItemFragment.newInstance(false, title)
             }
             else{
                 return Fragment()

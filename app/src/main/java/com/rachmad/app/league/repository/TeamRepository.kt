@@ -44,7 +44,7 @@ class TeamRepository {
                                 sendErrorTeam("We have no team")
                             }
                         } ?: run {
-                            sendErrorTeam("We have no tema")
+                            sendErrorTeam("We have no team")
                         }
                     } ?: run {
                         sendErrorTeam("Body is null")
@@ -90,7 +90,7 @@ class TeamRepository {
                                 sendErrorTeamByLeague("We have no team")
                             }
                         } ?: run {
-                            sendErrorTeamByLeague("We have no tema")
+                            sendErrorTeamByLeague("We have no team")
                         }
                     } ?: run {
                         sendErrorTeamByLeague("Body is null")

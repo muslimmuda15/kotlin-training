@@ -21,10 +21,12 @@ android {
         debug {
             buildConfigField "String", "SERVER_URL", '"https://www.thesportsdb.com"'
             buildConfigField "String", "MATCH_DB", '"matchdebug.db"'
+            buildConfigField "String", "TEAM_DB", '"teamdebug.db"'
         }
         release {
             buildConfigField "String", "SERVER_URL", '"https://www.thesportsdb.com"'
             buildConfigField "String", "MATCH_DB", '"matchrelease.db"'
+            buildConfigField "String", "MATCH_DB", '"teamrelease.db"'
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -86,4 +88,6 @@ dependencies {
     implementation "org.jetbrains.anko:anko-sqlite:0.10.8"
 
     implementation 'de.hdodenhof:circleimageview:3.0.1'
+
+    implementation 'de.codecrafters.tableview:tableview:2.8.1'
 }

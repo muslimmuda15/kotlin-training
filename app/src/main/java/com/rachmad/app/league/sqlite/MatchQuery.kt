@@ -7,9 +7,9 @@ import com.rachmad.app.league.helper.ui.DatabaseHelper
 import com.rachmad.app.league.helper.ui.DatabaseHelper.TABLE_MATCH
 import org.jetbrains.anko.db.*
 
-class Query {
+class MatchQuery {
     private val database: MatchDB
-        get() = DatabaseHelper.getInstance(App.context)
+        get() = DatabaseHelper.getMatchInstance(App.context)
 
     fun matchList(): List<MatchList> {
         return database.use {
@@ -54,7 +54,7 @@ class Query {
 
     fun insertMatch(data: MatchDetails){
         database.use {
-            insert(DatabaseHelper.TABLE_MATCH,
+            insert(TABLE_MATCH,
                 "idEvent" to data.idEvent,
                 "strEvent" to data.strEvent,
                 "strEventAlternate" to data.strEventAlternate,

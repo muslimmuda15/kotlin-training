@@ -1,21 +1,17 @@
 package com.rachmad.app.league.viewmodel
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.rachmad.app.league.App
 import com.rachmad.app.league.`object`.MatchDetails
 import com.rachmad.app.league.`object`.MatchList
 import com.rachmad.app.league.data.ErrorData
-import com.rachmad.app.league.helper.ui.DatabaseHelper
 import com.rachmad.app.league.repository.MatchRepository
-import com.rachmad.app.league.sqlite.MatchDB
-import com.rachmad.app.league.sqlite.Query
+import com.rachmad.app.league.sqlite.MatchQuery
 
 class MatchViewModel: ViewModel() {
     val matchRepository = MatchRepository()
-    val query = Query()
+    val query = MatchQuery()
     val matchLiveList = MutableLiveData<List<MatchList>>()
     val matchDetailsStorage = MutableLiveData<Boolean>()
 

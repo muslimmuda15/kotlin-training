@@ -32,7 +32,7 @@ class TeamActivity : AppCompatActivity(), TeamItemFragment.OnTeamFragmentListene
         supportActionBar?.elevation = 0F
 
         supportFragmentManager.commitNow {
-            add(R.id.container, TeamItemFragment.newInstance(leagueName))
+            add(R.id.container, TeamItemFragment.newInstance(false, leagueName))
         }
     }
 
